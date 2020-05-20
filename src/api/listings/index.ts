@@ -1,0 +1,1 @@
+export { TrendingSubreddits, getTrendingSubreddits } from './trending-subreddits';

@@ -1,0 +1,1 @@
+export const redditUrl: string = 'https://www.reddit.com';
