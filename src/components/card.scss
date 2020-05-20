@@ -1,0 +1,18 @@
+@use "../vars.scss" as colors;
+
+:root
+{
+	.r-sharp-card__surface
+	{
+		border-radius: 2em;
+		background-color: colors.$dark-surface;
+	}
+}
+
+:root[light]
+{
+	.r-sharp-card__surface
+	{
+		background-color: colors.$dark-surface;
+	}
+}

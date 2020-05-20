@@ -1,0 +1,22 @@
+@use './components/card.scss';
+@use './vars.scss' as colors;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root
+{
+	body
+	{
+		font-family: 'Roboto', sans-serif;
+		color: colors.$dark-text;
+		background-color: colors.$dark-background;
+	}
+}
+
+:root[light]
+{
+	body
+	{
+		color: colors.$dark-text;
+		background-color: colors.$dark-background;
+	}
+}
