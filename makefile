@@ -22,3 +22,6 @@ sass-dev:
 cp-dev:
 	@echo "Copying remaining files..."; \
 	cp ./src/index.html ./bin/; \
+	cp ./src/app-token.key ./bin; \
+	cp ./src/oauth-helper/index.html ./bin/oauth-helper; \
+	cp ./src/error.html ./bin/; \
