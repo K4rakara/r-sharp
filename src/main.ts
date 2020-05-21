@@ -7,8 +7,9 @@ import fetch, { Headers } from 'node-fetch';
 import btoa from 'btoa';
 import { dataDir, redditUrl, authRedirect, appToken } from './consts';
 import * as api from './api/index';
-import {_} from './utils';
-_;
+import {_} from './utils';import { RedditMe } from './api/account';
+ _;
+
 let window: BrowserWindow|null = null;
 let webserver: http.Server|null = null;
 
@@ -274,3 +275,14 @@ ipcMain.on('get-stored-error', (e: IpcMainEvent): void =>
 	e.reply('got-stored-error', globalState.storedError);
 });
 
+ipcMain.on('reddit:account:get-me', async (e: IpcMainEvent): Promise<void> =>
+{
+	const me: RedditMe = await api.account.getMe
+	(
+		globalState.oauthToken,
+		(globalState.userName !== '')
+			? globalState.userName
+			: undefined
+	);
+	e.reply('reply:reddit:account:get-me', me);
+});
