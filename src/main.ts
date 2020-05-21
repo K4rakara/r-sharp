@@ -6,6 +6,7 @@ import express from 'express';
 import fetch, { Headers } from 'node-fetch';
 import btoa from 'btoa';
 import { dataDir, redditUrl, authRedirect, appToken } from './consts';
+import * as api from './api/index';
 import {_} from './utils';
 _;
 let window: BrowserWindow|null = null;
@@ -22,6 +23,7 @@ const globalState:
 	oauthToken: string;
 	oauthRefreshToken: string;
 	oauthExpiresAt?: Date;
+	userName: string;
 } = 
 {
 	hasRSharpDir: false,
@@ -32,6 +34,7 @@ const globalState:
 	oauthOtc: '',
 	oauthToken: '',
 	oauthRefreshToken: '',
+	userName: '',
 };
 
 interface RedditOauthTokenResponse
@@ -110,6 +113,27 @@ const createWindow = (): void =>
 
 const getOauth = async (): Promise<void> =>
 {
+	/*
+	In order  to get authentication, we need to do the following:
+
+	- Open up a Reddit authentication page.
+	
+	- Open a webserver.
+
+	- Specify that the authentication page should redirect to that
+	  webserver (because it can't redirect to a local file).
+	
+	- Have the webserver point to an HTML page containing a script
+	  that uses the `ipcRenderer` to communicate back to the main
+	  process what the result of the authentication page was.
+	
+	- Recive the response and then send a POST request to get the
+	  token and refresh token.
+	
+	- Close the webserver.
+
+	- Open the R# interface.
+	*/
 	await new Promise((resolve, reject): void =>
 	{
 		// Generate a unique "state" to send to reddit for authentication.
@@ -191,16 +215,17 @@ const getOauth = async (): Promise<void> =>
 						({
 							'Authorization': `Basic ${btoa(`${appToken}:`)}`,
 							'content-type': 'application/x-www-form-urlencoded',
+							'User-Agent': `R# for Reddit -- Not logged in`
 						}),
 					}
 				)
 			).json();
-			console.log(token);
 			globalState.oauthToken = token.access_token;
 			globalState.oauthRefreshToken = token.refresh_token;
 			//@ts-ignore
 			globalState.oauthExpiresAt = (new Date()).addSeconds(token.expires_in);
 			await fs.promises.writeFile(path.join(dataDir, 'oauth.lock'), `${globalState.oauthToken}\n${globalState.oauthRefreshToken}\n${globalState.oauthExpiresAt?.getTime() || 0 / 1000}`);
+			globalState.userName = (await api.account.getMe(globalState.oauthToken)).subreddit.display_name_prefixed;
 			window?.loadFile(path.join(__dirname, 'index.html'));
 		}
 		catch(err)
