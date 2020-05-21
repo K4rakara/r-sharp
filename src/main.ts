@@ -6,7 +6,8 @@ import express from 'express';
 import fetch, { Headers } from 'node-fetch';
 import btoa from 'btoa';
 import { dataDir, redditUrl, authRedirect, appToken } from './consts';
-
+import {_} from './utils';
+_;
 let window: BrowserWindow|null = null;
 let webserver: http.Server|null = null;
 
@@ -178,23 +179,28 @@ const getOauth = async (): Promise<void> =>
 	{
 		try
 		{
-			const token: RedditOauthTokenResponse = await (await fetch
+			const token: RedditOauthTokenResponse = await
 			(
-				`${redditUrl}/api/v1/access_token`, 
-				{
-					method: 'POST',
-					body: `grant_type=authorization_code&code=${globalState.oauthOtc}&redirect_uri=${authRedirect}`,
-					headers: new Headers({
-						'Authorization': `Basic ${btoa(`${appToken}:`)}`,
-						'content-type': 'application/x-www-form-urlencoded',
-					}),
-				}
-			)).json();
+				await fetch
+				(
+					`${redditUrl}/api/v1/access_token`, 
+					{
+						method: 'POST',
+						body: `grant_type=authorization_code&code=${globalState.oauthOtc}&redirect_uri=${authRedirect}`,
+						headers: new Headers
+						({
+							'Authorization': `Basic ${btoa(`${appToken}:`)}`,
+							'content-type': 'application/x-www-form-urlencoded',
+						}),
+					}
+				)
+			).json();
 			console.log(token);
 			globalState.oauthToken = token.access_token;
 			globalState.oauthRefreshToken = token.refresh_token;
-			globalState.oauthExpiresAt = new Date(Date.now() + token.expires_in);
-			await fs.promises.writeFile(path.join(dataDir, 'oauth.lock'), `${globalState.oauthToken}\n${globalState.oauthRefreshToken}\n${globalState.oauthExpiresAt.getUTCSeconds()}`);
+			//@ts-ignore
+			globalState.oauthExpiresAt = (new Date()).addSeconds(token.expires_in);
+			await fs.promises.writeFile(path.join(dataDir, 'oauth.lock'), `${globalState.oauthToken}\n${globalState.oauthRefreshToken}\n${globalState.oauthExpiresAt?.getTime() || 0 / 1000}`);
 			window?.loadFile(path.join(__dirname, 'index.html'));
 		}
 		catch(err)
