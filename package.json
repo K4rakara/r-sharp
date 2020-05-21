@@ -2,9 +2,9 @@
   "name": "r-sharp",
   "version": "1.0.0",
   "description": "A Reddit desktop app.",
-  "main": "bin/main.js",
+  "main": "bin/main/main.js",
   "scripts": {
-    "start": "electron ./bin/main.js"
+    "start": "electron ./bin/main/main.js"
   },
   "author": "Jack Johannesen",
   "license": "MIT",

@@ -5,9 +5,9 @@ import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import express from 'express';
 import fetch, { Headers } from 'node-fetch';
 import btoa from 'btoa';
-import { dataDir, redditUrl, authRedirect, appToken } from './consts';
+import { dataDir, redditUrl, authRedirect, appToken } from '../consts';
 import * as api from './api/index';
-import {_} from './utils';import { RedditMe } from './api/account';
+import {_} from '../utils';import { RedditMe } from './api/account';
  _;
 
 let window: BrowserWindow|null = null;
@@ -104,12 +104,12 @@ const createWindow = (): void =>
 	});
 
 	if (globalState.hadTroubleLaunching)
-		window.loadFile(path.join(__dirname, 'error.html'))
+		window.loadFile(path.join(__dirname, '../renderer/error.html'))
 	else
 		if (globalState.needsOauth)
 			getOauth();
 		else
-			window.loadFile(path.join(__dirname, 'index.html'));
+			window.loadFile(path.join(__dirname, '../renderer/index.html'));
 
 };
 
@@ -228,7 +228,7 @@ const getOauth = async (): Promise<void> =>
 			globalState.oauthExpiresAt = (new Date()).addSeconds(token.expires_in);
 			await fs.promises.writeFile(path.join(dataDir, 'oauth.lock'), `${globalState.oauthToken}\n${globalState.oauthRefreshToken}\n${globalState.oauthExpiresAt?.getTime() || 0 / 1000}`);
 			globalState.userName = (await api.account.getMe(globalState.oauthToken)).subreddit.display_name_prefixed;
-			window?.loadFile(path.join(__dirname, 'index.html'));
+			window?.loadFile(path.join(__dirname, '../renderer/index.html'));
 		}
 		catch(err)
 		{
@@ -237,7 +237,7 @@ const getOauth = async (): Promise<void> =>
 	})
 	.catch((): void =>
 	{
-		window?.loadFile(path.join(__dirname, 'error.html'));
+		window?.loadFile(path.join(__dirname, '../renderer/error.html'));
 	})
 	.finally((): void =>
 	{
