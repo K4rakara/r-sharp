@@ -79,6 +79,7 @@ const prep = async (): Promise<void> =>
 						globalState.oauthToken = split[0];
 						globalState.oauthRefreshToken = split[1];
 						globalState.oauthExpiresAt = new Date(parseInt(split[2]));
+						resolve();
 					});
 			})
 			.catch((): void =>
@@ -272,3 +273,4 @@ ipcMain.on('get-stored-error', (e: IpcMainEvent): void =>
 {
 	e.reply('got-stored-error', globalState.storedError);
 });
+
