@@ -1,0 +1,56 @@
+@use "../vars.scss" as colors;
+@use "../../../node_modules/@material/ripple/dist/mdc.ripple.min.css";
+@import "./reddit-font.scss";
+
+:root
+{
+	.r-sharp-vote-button
+	{
+		display: block;
+		position: relative;
+		width: 1.5em;
+		height: 1.5em;
+		.r-sharp-vote-button__ripple
+		{
+			display: block;
+			top: 0;
+			left: 0;
+			width: 1.5em;
+			height: 1.5em;
+			position: absolute;
+			&.mdc-ripple-surface::before, &.mdc-ripple-surface::after
+			{
+				background-color: var(--r-sharp-vote-button__color);
+			}
+		}
+		.r-sharp-vote-button__icon
+		{
+			display: block;
+			top: calc(50% - (1em / 2));
+			left: calc(50% - (1em / 2));
+			width: 1em;
+			height: 1em;
+			position: absolute;
+			font-family: 'Reddit font';
+			font-style: normal;
+			color: #818384;
+			&:before { content: '\f13d'; }
+			&.flip:before { content: '\f110'; }
+			&.voted { color: var(--r-sharp-vote-button__color); }
+			&:hover { color: var(--r-sharp-vote-button__color); }
+		}
+		.r-sharp-vote-button__icon.voted
+		{
+			color: var(--r-sharp-vote-button__color);
+		}
+	}
+}
+
+@keyframes r-sharp-vote-button__animate
+{
+	0% { transform: translateY(0em); }
+	25% { transform: translateY(-.5em);	}
+	50% { transform: translateY(0em); }
+	75% { transform: translateY(-.25em); }
+	100% { transform: translateY(0em); }
+}

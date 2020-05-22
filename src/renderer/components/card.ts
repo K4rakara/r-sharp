@@ -2,18 +2,20 @@ import quark from '@quark.js/core';
 
 interface CardField
 {
-	type: 'field'|'component';
-	display: 'inline'|'block';
-	direction: 'row'|'row-reverse'|'column'|'column-reverse';
+	type: string;
+	display: string;
+	direction: string;
 	fields?: CardField[];
 	constructor: any;
-	element: { [key: string]: any };
-	component: string;
+	width?: number;
+	height?: number;
+	element?: { [key: string]: any };
+	component?: string;
 }
 
 interface CardConstructor
 {
-	direction: 'row'|'row-reverse'|'column'|'column-reverse';
+	direction: string;
 	fields: CardField[];
 }
 
@@ -60,7 +62,15 @@ export class Card extends quark.Component
 							? 'inline-flex'
 							: 'flex'
 					};${'\n'
-					}flex-direction: ${field.direction};`;
+					}flex-direction: ${field.direction};${
+						(field.width != null)
+							? `width: ${field.width}%;`
+							: ''
+					}${
+						(field.height != null)
+							? `height: ${field.height}%;`
+							: ''
+					}`;
 
 				if (field.type === 'field')
 				{
@@ -72,6 +82,7 @@ export class Card extends quark.Component
 				}
 				else if (field.type === 'component')
 				{
+					//@ts-ignore
 					quark.replace(thisElement, { ...field });
 					targetElement.appendChild(thisElement);
 				}

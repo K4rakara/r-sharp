@@ -1,4 +1,7 @@
 @use './components/card.scss';
+@use "./components/vote-button.scss";
+@use "./components/voting.scss";
+@use "./components/profile-picture.scss";
 @use './vars.scss' as colors;
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
@@ -9,6 +12,20 @@
 		font-family: 'Roboto', sans-serif;
 		color: colors.$dark-text;
 		background-color: colors.$dark-background;
+		header
+		{
+			display: flex;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: max-content;
+			position: fixed;
+			background-color: colors.$dark-surface;
+			#account-quicklook
+			{
+				width: 25%;
+			}
+		}
 	}
 }
 
