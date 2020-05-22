@@ -263,7 +263,7 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 					// Save to `globalState`.
 					globalState.oauthAccessToken = split[0];
 					globalState.oauthRefreshToken = split[1];
-					globalState.oauthExpiresAt = new Date(parseInt(split[2]));
+					globalState.oauthExpiresAt = new Date(parseInt(split[2]) * 1000);
 
 					// Automatically refresh token if required.
 					if (new Date().isPast(globalState.oauthExpiresAt))
