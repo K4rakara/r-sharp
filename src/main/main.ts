@@ -7,9 +7,8 @@ import fetch, { Headers } from 'node-fetch';
 import btoa from 'btoa';
 import { dataDir, redditUrl, authRedirect, appToken } from '../consts';
 import * as api from './api/index';
-import {_} from '../utils';import { RedditMe } from './api/account';
-import { AuthHeaders } from './api/auth-headers';
- _;
+import {_} from '../utils'; _;
+import { RedditMe } from './api/account';
 
 let window: BrowserWindow|null = null;
 let webserver: http.Server|null = null;
@@ -19,7 +18,7 @@ const globalState:
 	hasRSharpDir: boolean;
 	hadTroubleLaunching: boolean;
 	hadTroubleLaunchingReason: string;
-	needsOauth: boolean;
+	doLogin: boolean;
 	storedError: string;
 	oauthOtc: string;
 	oauthAccessToken: string;
@@ -32,7 +31,7 @@ const globalState:
 	hasRSharpDir: false,
 	hadTroubleLaunching: false,
 	hadTroubleLaunchingReason: '',
-	needsOauth: false,
+	doLogin: false,
 	storedError: 'N-no errror?',
 	oauthOtc: '',
 	oauthAccessToken: '',
@@ -82,7 +81,7 @@ const prep = async (): Promise<void> =>
 			})
 			.catch((): void =>
 			{
-				globalState.needsOauth = true;
+				globalState.doLogin = true;
 				resolve();
 			});
 	})
@@ -103,91 +102,40 @@ const createWindow = (): void =>
 	if (globalState.hadTroubleLaunching)
 		window.loadFile(path.join(__dirname, '../renderer/error.html'))
 	else
-		if (globalState.needsOauth)
-			getOauth();
+		if (globalState.doLogin)
+			login();
 		else
 			window.loadFile(path.join(__dirname, '../renderer/index.html'));
 
 };
 
-const getOauth = async (): Promise<void> =>
+const login = async (): Promise<void> =>
 {
-	/*
-	In order  to get authentication, we need to do the following:
-
-	- Open up a Reddit authentication page.
-	
-	- Open a webserver.
-
-	- Specify that the authentication page should redirect to that
-	  webserver (because it can't redirect to a local file).
-	
-	- Have the webserver point to an HTML page containing a script
-	  that uses the `ipcRenderer` to communicate back to the main
-	  process what the result of the authentication page was.
-	
-	- Recive the response and then send a POST request to get the
-	  token and refresh token.
-	
-	- Close the webserver.
-
-	- Open the R# interface.
-	*/
 	await new Promise((resolve: (v: string) => void, reject): void =>
 	{
-		// Generate a unique "state" to send to reddit for authentication.
 		let state: string = '';
 		while (state.length < 16) state += String.fromCharCode(Math.random()*26+65);
 
-		// Create listeners to wait for the localhost page that reddit should redirect to.
+		ipcMain.on('reddit:get-otc:reddit-error', (e: IpcMainEvent, apiError: string): void =>
+			{ globalState.storedError = `Reddit:GetOtc:RedditError:${apiError}`; reject(); });
 
-		// For when Reddit itself returns an error.
-		ipcMain.on('oauth-get-otc-api-error', (e: IpcMainEvent, apiError: string): void =>
-		{
-			globalState.storedError = `GetOtcRedditError:${apiError}`;
-			reject();
-		});
+		ipcMain.on('reddit:get-otc:get-state', (e: IpcMainEvent): void =>
+			e.reply('reply:reddit:get-otc:get-state', state));
 
-		// For when the render process requests the state that was sent to Reddit, so that it can be validated.
-		ipcMain.on('oauth-get-otc-get-state', (e: IpcMainEvent): void =>
-		{
-			e.reply('oauth-get-otc-got-state', state);
-		});
-
-		// For when the sent state and the recived state don't match.
-		ipcMain.on('oauth-get-otc-state-match-error', (e: IpcMainEvent, gotState: string, expectedState: string): void =>
-		{
-			globalState.storedError = `GetOtcStateMatchError:${gotState}:${expectedState}`;
-			reject();
-		});
+		ipcMain.on('reddit:get-otc:state-error', (e: IpcMainEvent, gotState: string, expectedState: string): void =>
+			{ globalState.storedError = `Reddit:GetOtc:StateMatchError:${gotState},${expectedState}`; reject(); });
 		
-		// For when the URL doesn't match any of the expected return values from reddit.
-		ipcMain.on('oauth-get-otc-url-match-error', (e: IpcMainEvent, url: string): void =>
-		{
-			globalState.storedError = `GetOtcUrlMatchError:${url}`;
-			reject();
-		});
+		ipcMain.on('reddit:get-otc:url-error', (e: IpcMainEvent, url: string): void =>
+			{ globalState.storedError = `Reddit:GetOtc:UrlMatchError:${url}`; reject(); });
 		
 		// For when we finally actually get the OTC to get the token.
-		ipcMain.on('oauth-get-otc-got-otc', (e: IpcMainEvent, otc: string): void =>
-		{
-			globalState.storedError = 'Success!';
-			globalState.oauthOtc = otc;
-			resolve(otc);
-		});
+		ipcMain.on('reddit:get-otc:otc', (e: IpcMainEvent, otc: string): void =>
+			{ globalState.storedError = 'Success!'; resolve(otc); });
 
-		// Start a webserver for handling oauth redirection.
 		const expressApp: express.Express = express();
 		expressApp.use('/reddit/oauth', express.static(path.join(__dirname, 'oauth-helper')));
-		try
-		{
-			webserver = expressApp.listen(9001);
-		}
-		catch(err)
-		{
-			globalState.storedError = `GetOtcStartServerError:Webserver already listening on 9001.`;
-			reject();
-		}
+		try { webserver = expressApp.listen(9001); }
+		catch(err) { globalState.storedError = `Reddit:GetOtc:WebserverError:Webserver already listening on port 9001.`; reject(); }
 
 		window?.loadURL(
 			`${redditUrl}/api/v1/authorize${''
@@ -210,11 +158,11 @@ const getOauth = async (): Promise<void> =>
 	.finally((): void =>
 	{
 		// Clean up ipcMain listeners.
-		ipcMain.removeHandler('oauth-get-otc-api-error');
-		ipcMain.removeHandler('oauth-get-otc-get-state');
-		ipcMain.removeHandler('oauth-get-otc-state-match-error');
-		ipcMain.removeHandler('oauth-get-otc-url-match-error');
-		ipcMain.removeHandler('oauth-get-otc-got-otc');
+		ipcMain.removeHandler('reddit:get-otc:reddit-error');
+		ipcMain.removeHandler('reddit:get-otc:get-state');
+		ipcMain.removeHandler('reddit:get-otc:state-error');
+		ipcMain.removeHandler('reddit:get-otc:url-error');
+		ipcMain.removeHandler('reddit:get-otc:otc');
 		
 		// Kill the server.
 		webserver?.close();

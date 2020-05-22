@@ -7,23 +7,23 @@ const state: string|undefined = window.location.href.match(/(?<=state=)[^&?]+/)?
 (async (): Promise<void> =>
 {
 	if (error != null)
-		ipcRenderer.send('oauth-get-otc-api-error', error);
+		ipcRenderer.send('reddit:get-otc:reddit-error', error);
 	else
 	{
 		if (code != null && state != null)
 		{
-			ipcRenderer.send('oauth-get-otc-get-state');
+			ipcRenderer.send('reddit:get-otc:get-state');
 			const prevState: string|undefined = await new Promise((resolve): void =>
 			{
-				ipcRenderer.once('oauth-get-otc-got-state', (e: IpcRendererEvent, v: string|undefined): void =>
+				ipcRenderer.once('reply:reddit:get-otc:get-state', (e: IpcRendererEvent, v: string|undefined): void =>
 					resolve(v));
 			});
 			if (state != prevState)
-				ipcRenderer.send('oauth-get-otc-state-match-error', state, prevState);
+				ipcRenderer.send('reddit:get-otc:state-error', state, prevState);
 			else
-				ipcRenderer.send('oauth-get-otc-got-otc', code);
+				ipcRenderer.send('reddit:get-otc:otc', code);
 		}
 		else
-			ipcRenderer.send('oauth-get-otc-url-match-error', window.location.href);
+			ipcRenderer.send('reddit:get-otc:url-error', window.location.href);
 	}
 })();
