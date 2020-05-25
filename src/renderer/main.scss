@@ -1,8 +1,4 @@
-@use './components/card.scss';
-@use "./components/vote-button.scss";
-@use "./components/voting.scss";
-@use "./components/profile-picture.scss";
-@use "./components/account-quicklook.scss";
+@use "./components/sass/index.scss";
 @use './vars.scss' as colors;
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
