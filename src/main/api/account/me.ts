@@ -1,6 +1,7 @@
-import fetch from 'node-fetch';
+import fetch, {Headers} from 'node-fetch';
 import { AuthHeaders } from '../auth-headers';
 import { oauthRedditUrl } from '../../../consts';
+import { RedditResponse } from '../reddit-response';
 
 export interface RedditMe
 {

@@ -26,6 +26,7 @@ const globalState:
 	oauthExpiresAt?: Date;
 	userName: string;
 	userId: string;
+	sessionTracker: string;
 } = 
 {
 	hasRSharpDir: false,
@@ -38,6 +39,7 @@ const globalState:
 	oauthRefreshToken: '',
 	userName: '',
 	userId: '',
+	sessionTracker: '',
 };
 
 interface RedditOauthTokenResponse
