@@ -98,6 +98,7 @@ const createWindow = (): void =>
 		webPreferences:
 		{
 			nodeIntegration: true,
+			nodeIntegrationInSubFrames: true,
 		},
 	});
 
