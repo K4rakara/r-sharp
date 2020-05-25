@@ -109,6 +109,7 @@ const createWindow = (): void =>
 		else
 			window.loadFile(path.join(__dirname, '../renderer/index.html'));
 
+	//window.removeMenu();
 };
 
 const login = async (): Promise<void> =>
