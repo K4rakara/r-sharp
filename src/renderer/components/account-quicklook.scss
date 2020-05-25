@@ -13,5 +13,30 @@
 		{
 			margin-left: .5em;
 		}
+		.r-sharp-account-quicklook__account-details
+		{
+			display: inline-flex;
+			flex-direction: column;
+			margin-left: .5em;
+			.r-sharp-account-quicklook__key-details
+			{
+				width: 100%;
+				font-size: 16px;
+				font-weight: 600;
+			}
+			.r-sharp-account-quicklook__lesser-details
+			{
+				display: inline-flex;
+				flex-direction: row;
+				justify-content: space-between;
+				width: 100%;
+				font-size: 12px;
+				font-weight: initial;
+				.r-sharp-account-quicklook__karma
+				{
+					
+				}
+			}
+		}
 	}
 }
