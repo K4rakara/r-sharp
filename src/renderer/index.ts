@@ -10,7 +10,7 @@ import {
 	Post,
 	AccountQuicklook,
 	ProfilePicture,
-} from './components/index';
+} from './components/ts/index';
 import * as api from './api/index';
 import { RSharp } from './r-sharp';
 

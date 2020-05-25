@@ -1,5 +1,5 @@
 import quark from '@quark.js/core';
-import { stripImageUrl } from '../api/image-fetch';
+import { stripImageUrl } from '../../api/image-fetch';
 
 interface ProfilePictureConstructor { src: string; }
 

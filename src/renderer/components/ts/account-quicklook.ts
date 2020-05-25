@@ -1,5 +1,5 @@
 import quark from '@quark.js/core';
-import { RedditMe } from '../../main/api/account';
+import { RedditMe } from '../../../main/api/account';
 
 interface AccountQuicklookConstructor { me: RedditMe }
 
