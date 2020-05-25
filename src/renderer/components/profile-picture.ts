@@ -1,5 +1,5 @@
 import quark from '@quark.js/core';
-import { fetchImageUrl } from '../api/image-fetch';
+import { stripImageUrl } from '../api/image-fetch';
 
 interface ProfilePictureConstructor { src: string; }
 
@@ -19,10 +19,7 @@ export class ProfilePicture extends quark.Component
 
 		const profilePicture: HTMLDivElement = document.createElement('div');
 		profilePicture.classList.add('r-sharp-profile-picture');
-		(async (): Promise<void> =>
-		{
-			profilePicture.style.cssText += `background-image: url('${await fetchImageUrl(args.constructor.src)}');`;
-		})();
+		profilePicture.innerHTML += `<img src="${stripImageUrl(args.constructor.src)}"/>`;
 		el.append(profilePicture);
 	}
 }
