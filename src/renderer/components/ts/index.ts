@@ -6,3 +6,4 @@ export { Voting } from './voting';
 export { Post } from './post';
 export { ProfilePicture } from './profile-picture';
 export { AccountQuicklook } from './account-quicklook';
+export { Tabs } from './tabs';

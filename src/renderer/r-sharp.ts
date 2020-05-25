@@ -6,15 +6,27 @@ export class RSharp
 {
 	public currentUser?: RedditMe;
 	public accountQuicklook?: HTMLElement;
+	public tabs?: HTMLElement;
 
 	constructor()
 	{
-		console.log('hi');
+		const tabs: HTMLElement|null = document.querySelector('header #tabs');
+		if (tabs != null)
+		{
+			this.tabs = tabs;
+			quark.replace
+			(
+				tabs,
+				{
+					component: 'tabs',
+					constructor: {},
+					element: {}
+				}
+			);
+		}
 		(async (): Promise<void> =>
 		{
-			console.log('hiya');
 			this.currentUser = await api.account.getMe();
-			console.log('heyo');
 			{
 				const accountQuicklook: HTMLElement|null = document.querySelector('header #account-quicklook');
 				if (accountQuicklook != null)
@@ -29,9 +41,8 @@ export class RSharp
 							element: {}
 						}
 					);
-				} else alert("err");
+				}
 			}
-
 		})();
 	}
 }

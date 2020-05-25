@@ -12,16 +12,30 @@
 		header
 		{
 			display: flex;
+			justify-content: space-between;
 			top: 0;
 			left: 0;
 			width: 100vw;
-			height: max-content;
+			height: 3em;
 			position: fixed;
 			background-color: colors.$dark-surface;
-			#account-quicklook
+			#account-quicklook { width: max-content; }
+			#tabs
 			{
-				width: 25%;
+				width: calc((1.25em * 3) * 3);
+				height: 100%;
 			}
+		}
+		.tab
+		{
+			display: none;
+			top: 3em;
+			left: 0;
+			width: 100vw;
+			height: calc(100vh - 3em);
+			position: fixed;
+			border: none;
+			&.tab__current { display: block; }
 		}
 	}
 }

@@ -9,6 +9,7 @@
 		align-items: center;
 		width: max-content;
 		height: 3em;
+		user-select: none;
 		.r-sharp-account-quicklook__profile-picture
 		{
 			margin-left: .5em;
@@ -34,7 +35,14 @@
 				font-weight: initial;
 				.r-sharp-account-quicklook__karma
 				{
-					
+					svg
+					{
+						width: 1em;
+						height: 1em;
+						vertical-align: text-top;
+						object-fit: contain;
+						fill: colors.$dark-upvote;
+					}
 				}
 			}
 		}

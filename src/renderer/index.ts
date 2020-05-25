@@ -10,6 +10,7 @@ import {
 	Post,
 	AccountQuicklook,
 	ProfilePicture,
+	Tabs,
 } from './components/ts/index';
 import * as api from './api/index';
 import { RSharp } from './r-sharp';
@@ -23,6 +24,7 @@ quark.registerComponent('voting', Voting);
 quark.registerComponent('post', Post);
 quark.registerComponent('account-quicklook', AccountQuicklook);
 quark.registerComponent('profile-picture', ProfilePicture);
+quark.registerComponent('tabs', Tabs);
 
 // Create the app state.
 const rSharp: RSharp = new RSharp();

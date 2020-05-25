@@ -1,0 +1,24 @@
+@use "../../vars.scss" as colors;
+@import "./reddit-font.scss";
+
+:root
+{
+	.r-sharp-icons__reddit-premium
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-upvote;
+		&:before { content: '\f131'; }
+	}
+	.r-sharp-icons__reddit-coin
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-coin;
+		&:before { content: '\f10a'; }
+	}
+}
