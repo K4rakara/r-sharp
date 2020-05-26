@@ -2,6 +2,11 @@
 @use '../../vars.scss' as colors;
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+@font-face {
+	font-family: 'Reddit font';
+	src: url('../../components/sass/reddit-font.woff');
+}
+
 :root
 {
 	body
@@ -9,9 +14,9 @@
 		top: 0;
 		left: 0;
 		width: 100vw;
+		height: 100vh;
 		margin: 0;
 		position: fixed;
-		overflow-y: scroll;
 		font-family: 'Roboto', sans-serif;
 		color: colors.$dark-text;
 		background-color: colors.$dark-background;
@@ -20,7 +25,12 @@
 			top: 0;
 			left: 12.5vw;
 			width: 75vw;
-			position: fixed;
+			height: 100%;
+			position: relative;
+			overflow-y: scroll;
+			&::-webkit-scrollbar { display: none; }
+			@media only screen and (min-width: 720px) { & { left: 20vw; width: 60vw; } }
+			@media only screen and (min-width: 1024px) { & { left: 25vw; width: 50vw; } }
 		}
 	}
 }

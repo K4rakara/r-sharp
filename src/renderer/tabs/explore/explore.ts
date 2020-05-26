@@ -2,22 +2,23 @@ import quark from '@quark.js/core';
 import {
 	Card,
 	Post,
-	VoteButton,
 	UpvoteButton,
 	DownvoteButton,
-	Voting,
 	PostHeader,
+	PostPreview,
+	PostVoting,
 } from '../../components/ts';
 import { RedditLink, RedditFeed } from '../../../main/api/reddit-types';
 import * as api from '../../api';
+import * as utils from '../../utils';
 
 quark.registerComponent('card', Card);
 quark.registerComponent('post', Post);
 quark.registerComponent('post__header', PostHeader);
-quark.registerComponent('vote-button', VoteButton);
+quark.registerComponent('post__preview', PostPreview);
+quark.registerComponent('post__voting', PostVoting);
 quark.registerComponent('upvote-button', UpvoteButton);
 quark.registerComponent('downvote-button', DownvoteButton);
-quark.registerComponent('voting', Voting);
 
 class Explore
 {

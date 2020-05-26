@@ -1,0 +1,1 @@
+export { prettyNumber } from './pretty-number';

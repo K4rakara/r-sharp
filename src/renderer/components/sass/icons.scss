@@ -21,4 +21,13 @@
 		color: colors.$dark-coin;
 		&:before { content: '\f10a'; }
 	}
+	.r-sharp-icons__upvote
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: #818384;
+		&:before { content: '\f13d'; }
+	}
 }

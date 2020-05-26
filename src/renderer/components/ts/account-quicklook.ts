@@ -1,6 +1,7 @@
 import quark from '@quark.js/core';
 import { RedditMe } from '../../../main/api/account';
 import { karmaSvgIcon } from '../../../consts';
+import * as utils from '../../utils';
 
 interface AccountQuicklookConstructor { me: RedditMe }
 
@@ -45,11 +46,11 @@ export class AccountQuicklook extends quark.Component
 			'\n\t'}<div class="r-sharp-account-quicklook__lesser-details">${	
 			'\n\t\t'}<span class="r-sharp-account-quicklook__karma">${
 			'\n\t\t\t'}${karmaSvgIcon}${
-			'\n\t\t\t'}${args.constructor.me.link_karma + args.constructor.me.comment_karma}${
+			'\n\t\t\t'}${utils.prettyNumber(args.constructor.me.link_karma + args.constructor.me.comment_karma)}${
 			'\n\t\t'}</span>${
 			'\n\t\t'}<span class="r-sharp-account-quicklook__coins">${
 			'\n\t\t\t'}<i class="r-sharp-icons__reddit-coin"></i>${
-			'\n\t\t\t'}${args.constructor.me.gold_creddits}${
+			'\n\t\t\t'}${utils.prettyNumber(args.constructor.me.gold_creddits)}${
 			'\n\t\t'}</span>${
 			'\n\t'}</div>${
 			'\n'}</div>`;

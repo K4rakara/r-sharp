@@ -109,7 +109,7 @@ export class VoteButton extends quark.Component
 		super(el, args);
 
 		const voteButtonContainer: HTMLDivElement = document.createElement('div');
-		voteButtonContainer.classList.add('r-sharp-vote-button');
+		voteButtonContainer.classList.add('r-sharp-upvote-button');
 		voteButtonContainer.style.cssText += `--r-sharp-vote-button__color: ${args.constructor.color};`;
 		
 		const voteButtonRipple: HTMLDivElement = document.createElement('div');

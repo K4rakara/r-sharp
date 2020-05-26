@@ -6,7 +6,6 @@ import {
 	VoteButton,
 	UpvoteButton,
 	DownvoteButton,
-	Voting,
 	Post,
 	AccountQuicklook,
 	ProfilePicture,
@@ -20,7 +19,6 @@ quark.registerComponent('card', Card);
 quark.registerComponent('vote-button', VoteButton);
 quark.registerComponent('upvote-button', UpvoteButton);
 quark.registerComponent('downvote-button', DownvoteButton);
-quark.registerComponent('voting', Voting);
 quark.registerComponent('post', Post);
 quark.registerComponent('account-quicklook', AccountQuicklook);
 quark.registerComponent('profile-picture', ProfilePicture);
