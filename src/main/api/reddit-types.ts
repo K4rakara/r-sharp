@@ -53,7 +53,23 @@ export interface RedditLink
 	link_flair_text_color: string;
 	link_flair_type: string;
 	locked: boolean;
-	media?: any;
+	media?:
+	{
+		content: string;
+		markdown_content: string;
+		media_metadata?: any;
+		obfuscated?: any;
+		richtext_content:
+		{
+			document:
+			{
+				c: string[];
+				e: string;
+			},
+			rte_mode: string;
+			type: string;
+		}
+	};
 	media_embed: {};
 	media_only: boolean;
 	mod_note?: any;
@@ -92,7 +108,7 @@ export interface RedditLink
 	subreddit_subscribers: number;
 	subreddit_type: string;
 	suggested_sort?: any;
-	thumbnail: string;
+	thumbnail: RedditImage|string;
 	thumbnail_height: number;
 	thumbnail_width: number;
 	title: string;
