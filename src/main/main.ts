@@ -9,6 +9,7 @@ import { dataDir, redditUrl, authRedirect, appToken } from '../consts';
 import * as api from './api/index';
 import {_} from '../utils'; _;
 import { RedditMe } from './api/account';
+import { RedditFeed } from './api/reddit-types';
 
 let window: BrowserWindow|null = null;
 let webserver: http.Server|null = null;
@@ -384,4 +385,17 @@ ipcMain.on('reddit:account:get-me', async (e: IpcMainEvent): Promise<void> =>
 			: undefined
 	);
 	e.reply('reply:reddit:account:get-me', me);
+});
+
+ipcMain.on('reddit:listings:best', async (e: IpcMainEvent, after?: string): Promise<void> =>
+{
+	const feed: RedditFeed = await api.listings.listBest
+	(
+		after || '',
+		globalState.oauthAccessToken,
+		(globalState.userName !== '')
+			? globalState.userName
+			: undefined
+	);
+	e.reply('reply:reddit:listings:best', feed);
 });
