@@ -1,3 +1,6 @@
+@use "../../components/sass/index.scss";
+@use '../../vars.scss' as colors;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 :root
 {
@@ -6,15 +9,17 @@
 		top: 0;
 		left: 0;
 		width: 100vw;
-		height: 100vh;
 		margin: 0;
 		position: fixed;
+		overflow-y: scroll;
+		font-family: 'Roboto', sans-serif;
+		color: colors.$dark-text;
+		background-color: colors.$dark-background;
 		main
 		{
 			top: 0;
 			left: 12.5vw;
 			width: 75vw;
-			height: max-content;
 			position: fixed;
 		}
 	}

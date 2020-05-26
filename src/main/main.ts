@@ -387,11 +387,11 @@ ipcMain.on('reddit:account:get-me', async (e: IpcMainEvent): Promise<void> =>
 	e.reply('reply:reddit:account:get-me', me);
 });
 
-ipcMain.on('reddit:listings:best', async (e: IpcMainEvent, after?: string): Promise<void> =>
+ipcMain.on('reddit:listings:best', async (e: IpcMainEvent, after?: string|null): Promise<void> =>
 {
 	const feed: RedditFeed = await api.listings.listBest
 	(
-		after || '',
+		after ?? '',
 		globalState.oauthAccessToken,
 		(globalState.userName !== '')
 			? globalState.userName
