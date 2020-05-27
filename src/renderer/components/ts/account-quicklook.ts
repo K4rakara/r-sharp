@@ -3,7 +3,7 @@ import { RedditMe } from '../../../main/api/account';
 import { karmaSvgIcon } from '../../../consts';
 import * as utils from '../../utils';
 
-interface AccountQuicklookConstructor { me: RedditMe }
+interface AccountQuicklookConstructor { me: Promise<RedditMe> }
 
 interface AccountQuicklookArguments
 {

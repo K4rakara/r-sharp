@@ -8,6 +8,10 @@
 		border-radius: 1em;
 		margin-top: 2em;
 		margin-bottom: 2em;
+		animation-name: r-sharp-post__slide-in;
+		animation-duration: 1s;
+		animation-fill-mode: forwards;
+		animation-timing-function: ease-out;
 		background-color: colors.$dark-surface;
 		box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 		.r-sharp-post__left
@@ -77,4 +81,10 @@
 		}
 
 	}
+}
+
+@keyframes r-sharp-post__slide-in
+{
+	from { transform: translateY(64px); opacity: 0; }
+	to { transform: translateY(0px); opacity: 1; }
 }

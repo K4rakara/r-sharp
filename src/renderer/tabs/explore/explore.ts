@@ -11,6 +11,7 @@ import {
 import { RedditLink, RedditFeed } from '../../../main/api/reddit-types';
 import * as api from '../../api';
 import * as utils from '../../utils';
+import { IfcFrame, IfcFrameEvent } from '../ifc-frame';
 
 quark.registerComponent('card', Card);
 quark.registerComponent('post', Post);
@@ -51,3 +52,16 @@ class Explore
 }
 
 const explore = new Explore();
+
+const toBeCalled = (): void => console.log('success!');
+
+(<any>window).ifcFrame = new IfcFrame();
+(<any>window).ifcFrame.once('initialize', (e: IfcFrameEvent, ...args: any): void =>
+{
+	e.reply('reply:initialize', 'OK');
+});
+
+(<any>window).ifcFrame.once('test', (): void =>
+{
+	toBeCalled();
+});

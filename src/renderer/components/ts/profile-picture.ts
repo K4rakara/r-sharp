@@ -1,5 +1,6 @@
 import quark from '@quark.js/core';
 import { stripImageUrl } from '../../api/image-fetch';
+import { QuarkHTMLElement } from '../../quark-element';
 
 interface ProfilePictureConstructor { src: string; }
 
@@ -13,7 +14,31 @@ interface ProfilePictureArguments
 
 export class ProfilePicture extends quark.Component
 {
-	constructor(el: HTMLElement, args: ProfilePictureArguments)
+	#QuarkData = class
+	{
+		#element: QuarkHTMLElement;
+		#src: string;
+
+		get src(): string { return this.#src; }
+		set src(v: string)
+		{
+			
+		}
+
+		#panic = (): void =>
+		{
+			this.#element.remove();
+			console.log('');
+		}
+
+		constructor(el: QuarkHTMLElement, src: string)
+		{
+			this.#element = el;
+			this.#src = src;
+		}
+	}
+
+	constructor(el: QuarkHTMLElement, args: ProfilePictureArguments)
 	{
 		super(el, args);
 
