@@ -326,7 +326,7 @@ export class PostHeader extends quark.Component
 			'\n\t\t'}</span>${
 			'\n\t'}</div>${
 			'\n'}</div>${
-			'\n'}<div class="r-sharp-psot__header__title">${
+			'\n'}<div class="r-sharp-post__header__title">${
 			'\n\t'}${args.constructor.link.title}${
 			'\n'}</div>`;
 	}
