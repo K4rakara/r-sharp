@@ -1,5 +1,4 @@
 import quark from '@quark.js/core';
-import { Card } from './card';
 import { QuarkHTMLElement } from '../../quark-element';
 import { RedditLink } from '../../../main/api/reddit-types';
 import * as utils from '../../utils';

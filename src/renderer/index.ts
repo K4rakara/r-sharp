@@ -2,7 +2,6 @@
 import quark from '@quark.js/core';
 import { ipcRenderer } from 'electron';
 import {
-	Card,
 	VoteButton,
 	UpvoteButton,
 	DownvoteButton,
@@ -17,7 +16,6 @@ import { IfcFrame } from './tabs/ifc-frame';
 import { IfcRootEvent } from './tabs/ifc-root';
 
 // Register components.
-quark.registerComponent('card', Card);
 quark.registerComponent('vote-button', VoteButton);
 quark.registerComponent('upvote-button', UpvoteButton);
 quark.registerComponent('downvote-button', DownvoteButton);

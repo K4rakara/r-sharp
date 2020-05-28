@@ -1,5 +1,3 @@
-export { Card } from './card';
-export { VoteButton } from './vote-button';
 export { UpvoteButton } from './upvote-button';
 export { DownvoteButton } from './downvote-button';
 export { Post, PostHeader, PostPreview, PostVoting } from './post';
