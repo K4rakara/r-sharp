@@ -14,7 +14,7 @@
 		font-size: 16px;
 		height: 16px;
 		color: colors.$dark-text;
-		&.upvoted { color: colors.$dark-upvote; }
-		&.downvoted { color: colors.$dark-downvote; }
+		&[upvoted] { color: colors.$dark-upvote; }
+		&[downvoted] { color: colors.$dark-downvote; }
 	}
 }

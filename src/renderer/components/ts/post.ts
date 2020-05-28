@@ -192,7 +192,9 @@ export class PostVoting extends quark.Component
 		#downvoted: boolean = false;
 
 		get upvoted(): boolean { return this.#upvoted; }
-		
+
+		get downvoted(): boolean { return this.#downvoted; }
+
 		public upvote(): void
 		{
 			if (!this.#upvoted)
@@ -203,6 +205,8 @@ export class PostVoting extends quark.Component
 				if (votingNumbers != null)
 				{
 					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					votingNumbers.setAttribute('upvoted', '');
+					votingNumbers.removeAttribute('downvoted');
 					this.#upvoted = true;
 					this.#downvoted = false;
 				} else this.#panic();
@@ -218,13 +222,12 @@ export class PostVoting extends quark.Component
 				if (votingNumbers != null)
 				{
 					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					votingNumbers.removeAttribute('upvoted');
 					this.#upvoted = false;
 					this.#downvoted = false;
 				} else this.#panic();
 			}
 		}
-
-		get downvoted(): boolean { return this.#downvoted; }
 
 		public downvote(): void
 		{
@@ -235,6 +238,8 @@ export class PostVoting extends quark.Component
 				if (votingNumbers != null)
 				{
 					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					votingNumbers.setAttribute('downvote', '');
+					votingNumbers.removeAttribute('upvoted');
 					this.#upvoted = false;
 					this.#downvoted = true;
 				} else this.#panic();
@@ -250,6 +255,7 @@ export class PostVoting extends quark.Component
 				if (votingNumbers != null)
 				{
 					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					votingNumbers.removeAttribute('downvoted');
 					this.#upvoted = false;
 					this.#downvoted = false;
 				} else this.#panic();
