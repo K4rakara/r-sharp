@@ -15,7 +15,6 @@ import { IfcFrame } from './tabs/ifc-frame';
 import { IfcRootEvent } from './tabs/ifc-root';
 
 // Register components.
-quark.registerComponent('vote-button', VoteButton);
 quark.registerComponent('upvote-button', UpvoteButton);
 quark.registerComponent('downvote-button', DownvoteButton);
 quark.registerComponent('post', Post);
