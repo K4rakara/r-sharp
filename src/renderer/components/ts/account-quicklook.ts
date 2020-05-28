@@ -67,15 +67,28 @@ export class AccountQuicklook extends quark.Component
 			this.#me = me;
 
 			const profilePictureElement: HTMLImageElement|null = this.profilePicture.querySelector('img');
-			if (profilePictureElement != null) profilePictureElement.src = utils.stripImageUrl(me.subreddit.icon_img);
+			if (profilePictureElement != null)
+			{
+				profilePictureElement.src = utils.stripImageUrl(me.subreddit.icon_img);
+				if (profilePictureElement.complete)
+					profilePictureElement.setAttribute('loaded', '');
+				else
+					profilePictureElement.addEventListener('load', (): void =>
+						profilePictureElement.setAttribute('loaded', ''));
+			}
 			
-			this.keyDetails.innerHTML += `${this.#me.subreddit.display_name_prefixed}`;
+			this.keyDetails.innerHTML = `${this.#me.subreddit.display_name_prefixed}`;
 			if (this.#me.is_gold)
 				this.keyDetails.innerHTML += `<i class="r-sharp-icons__reddit-premium"></i>`;
-		
-			this.karmaElement.innerHTML += utils.prettyNumber(this.#me.comment_karma + this.#me.link_karma);
+			this.keyDetails.setAttribute('loaded', '');
 
+			this.karmaElement.innerHTML = this.karmaElement.innerHTML.replace('4200', '');
+			this.karmaElement.innerHTML += utils.prettyNumber(this.#me.comment_karma + this.#me.link_karma);
+			this.karmaElement.setAttribute('loaded', '');
+
+			this.coins.innerHTML = this.coins.innerHTML.replace('42', '');
 			this.coins.innerHTML += utils.prettyNumber(this.#me.coins);
+			this.coins.setAttribute('loaded', '');
 		}
 
 		#panic = (): void =>
@@ -127,13 +140,16 @@ export class AccountQuicklook extends quark.Component
 		accountQuicklookContainer.innerHTML +=
 			`<div class="r-sharp-account-quicklook__account-details">${
 			'\n\t'}<div class="r-sharp-account-quicklook__key-details">${
+			'\n\t\t'}u/foobarbaz${
 			'\n\t'}</div>${
 			'\n\t'}<div class="r-sharp-account-quicklook__lesser-details">${	
 			'\n\t\t'}<span class="r-sharp-account-quicklook__karma">${
 			'\n\t\t\t'}${karmaSvgIcon}${
+			'\n\t\t\t'}4200${
 			'\n\t\t'}</span>${
 			'\n\t\t'}<span class="r-sharp-account-quicklook__coins">${
 			'\n\t\t\t'}<i class="r-sharp-icons__reddit-coin"></i>${
+			'\n\t\t\t'}42${
 			'\n\t\t'}</span>${
 			'\n\t'}</div>${
 			'\n'}</div>`;

@@ -1,0 +1,23 @@
+// Content loading animation.
+
+@keyframes r-sharp-animations__content-loading
+{
+	from { filter: blur(10px); }
+	to { filter: blur(5px); }
+}
+
+@mixin content-loading
+{
+	animation-name: r-sharp-animations__content-loading;
+	animation-duration: .75s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+	animation-fill-mode: both;
+	animation-direction: alternate;
+}
+
+@mixin content-loading-done
+{
+	animation-name: none;
+}
+

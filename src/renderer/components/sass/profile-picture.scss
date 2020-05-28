@@ -1,3 +1,5 @@
+@use "./animations.scss" as animations;
+
 :root
 {
 	.r-sharp-profile-picture
@@ -11,6 +13,8 @@
 			height: 100%;
 			border-radius: 50%;
 			object-fit: contain;
+			@include animations.content-loading;
+			&[loaded] { @include animations.content-loading-done; }
 		}
 	}
 }
