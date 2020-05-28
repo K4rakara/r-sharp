@@ -53,5 +53,7 @@ export class ProfilePicture extends quark.Component
 		profilePicture.classList.add('r-sharp-profile-picture');
 		profilePicture.innerHTML += `<img src="${stripImageUrl(args.constructor.src || getDefaultProfilePictureUrl())}"/>`;
 		el.append(profilePicture);
+
+		el.quark = new this.#QuarkData(el, stripImageUrl(args.constructor.src || getDefaultProfilePictureUrl()));
 	}
 }
