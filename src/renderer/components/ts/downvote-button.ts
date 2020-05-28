@@ -1,4 +1,20 @@
 import quark from '@quark.js/core';
+import { QuarkHTMLElement } from '../../quark-element';
+import { MDCRipple } from '@material/ripple';
+import dynamics from 'dynamics.js';
+
+interface DownvoteButtonConstructor
+{
+	post: QuarkHTMLElement;
+}
+
+interface DownvoteButtonArguments
+{
+	tag?: string;
+	component: string;
+	constructor: DownvoteButtonConstructor;
+	element: any;
+}
 
 export class DownvoteButton extends quark.Component
 {
@@ -6,50 +22,107 @@ export class DownvoteButton extends quark.Component
 	#QuarkData = class
 	{
 		#element: HTMLElement;
-		#status: boolean;
-		#parentPost: any;
+		#post: QuarkHTMLElement;
+		#context: MDCRipple;
+		#canAnimate: boolean = true;
 
 		public downvote(): void
 		{
-			//@ts-ignore
-			this.#element.firstElementChild.quark.vote();
-			this.#status = !this.#status;
+			if (!this.#post.quark.downvoted) this.#post.quark.downvote();
+			else this.#post.quark.undownvote();
+			this.animate();
 		}
 
-		constructor(el: HTMLElement)
+		public animate(): void
+		{
+			const downvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__downvote');
+			const downvoteButtonRipple: HTMLElement|null = this.#element.querySelector('.r-sharp-downvote-button__ripple');
+			if (downvoteButtonIcon != null && downvoteButtonRipple != null)
+			{
+				if (this.#post.quark.downvoted)
+					downvoteButtonIcon.classList.add('downvoted');
+				else
+					downvoteButtonIcon.classList.remove('downvoted');
+				if (this.#canAnimate)
+				{
+					this.canAnimate = false;
+					dynamics.animate
+					(
+						downvoteButtonIcon,
+						{
+							translateY: 16,
+						},
+						{
+							type: dynamics.bounce,
+							duration: 300,
+							frequency: 100,
+							friction: 75,
+							complete: (): void => { this.canAnimate = true; }
+						}
+					);
+				}
+				this.#context.activate();
+				setTimeout((): void => this.deripple(), 4);
+			}
+			else this.#panic();
+		}
+
+		public update(): void
+		{
+			const downvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__downvote');
+			if (downvoteButtonIcon != null)
+			{
+				if (this.#post.quark.downvoted)
+					downvoteButtonIcon.classList.add('downvoted');
+				else
+					downvoteButtonIcon.classList.remove('downvoted');
+			}
+		}
+
+		public deripple(): void
+		{
+			this.#context.deactivate();
+		}
+
+		get canAnimate(): boolean { return this.#canAnimate; }
+		set canAnimate(v: boolean) { this.#canAnimate = v; }
+		
+		#panic = (): void =>
+		{
+			this.#element.remove();
+			console.log(`An Downvote element lacked one or more critical elements for it to function, and will now be removed.`);
+		}
+
+		constructor(el: HTMLElement, post: QuarkHTMLElement, context: MDCRipple)
 		{
 			this.#element = el;
-			this.#status = false;
+			this.#post = post;
+			this.#context = context;
 		}
 	}
 
-	constructor(el: HTMLElement, args: any)
+	constructor(el: QuarkHTMLElement, args: DownvoteButtonArguments)
 	{
 		super(el, args);
 
-		quark.append
-		(
-			el,
-			{
-				tag: 'div',
-				component: 'vote-button',
-				constructor:
-				{
-					color: '#7193ff',
-					flip: true,
-				},
-				element: {}
-			}
-		);
+		const downvoteButtonContainer: HTMLDivElement = document.createElement('div');
+		downvoteButtonContainer.classList.add('r-sharp-downvote-button');
+		
+		const downvoteButtonRipple: HTMLDivElement = document.createElement('div');
+		downvoteButtonRipple.classList.add('r-sharp-downvote-button__ripple', 'mdc-ripple-surface');
+		const ctx: MDCRipple = new MDCRipple(downvoteButtonRipple);
+		downvoteButtonContainer.appendChild(downvoteButtonRipple);
+		ctx.unbounded = true;
 
-		el.onclick = (): void =>
-		{
-			//@ts-ignore
-			el.quark.downvote();
-		};
+		const downvoteButtonIcon: HTMLElement = document.createElement('i');
+		downvoteButtonIcon.classList.add('r-sharp-icons__downvote');
+		downvoteButtonContainer.appendChild(downvoteButtonIcon);
 
-		//@ts-ignore
-		el.quark = new this.#QuarkData(el);
+		el.appendChild(downvoteButtonContainer);
+
+		el.addEventListener('click', (): void => el.quark.downvote());
+
+		el.quark = new this.#QuarkData(el, args.constructor.post, ctx);
 	}
 
 }

@@ -30,4 +30,13 @@
 		color: #818384;
 		&:before { content: '\f13d'; }
 	}
+	.r-sharp-icons__downvote
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: #818384;
+		&:before { content: '\f110'; }
+	}
 }

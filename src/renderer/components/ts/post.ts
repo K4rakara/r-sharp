@@ -190,6 +190,8 @@ export class PostVoting extends quark.Component
 		#post: QuarkHTMLElement;
 		#upvoted: boolean = false;
 		#downvoted: boolean = false;
+		#upvoteButton?: QuarkHTMLElement;
+		#downvoteButton?: QuarkHTMLElement;
 
 		get upvoted(): boolean { return this.#upvoted; }
 
@@ -209,6 +211,7 @@ export class PostVoting extends quark.Component
 					votingNumbers.removeAttribute('downvoted');
 					this.#upvoted = true;
 					this.#downvoted = false;
+					this.#update();
 				} else this.#panic();
 			}
 		}
@@ -225,6 +228,7 @@ export class PostVoting extends quark.Component
 					votingNumbers.removeAttribute('upvoted');
 					this.#upvoted = false;
 					this.#downvoted = false;
+					this.#update();
 				} else this.#panic();
 			}
 		}
@@ -238,10 +242,11 @@ export class PostVoting extends quark.Component
 				if (votingNumbers != null)
 				{
 					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
-					votingNumbers.setAttribute('downvote', '');
+					votingNumbers.setAttribute('downvoted', '');
 					votingNumbers.removeAttribute('upvoted');
 					this.#upvoted = false;
 					this.#downvoted = true;
+					this.#update();
 				} else this.#panic();
 			}
 		}
@@ -258,9 +263,16 @@ export class PostVoting extends quark.Component
 					votingNumbers.removeAttribute('downvoted');
 					this.#upvoted = false;
 					this.#downvoted = false;
+					this.#update();
 				} else this.#panic();
 			}
 		}
+
+		#update = (): void =>
+		{
+			this.#upvoteButton?.quark.update();
+			this.#downvoteButton?.quark.update();
+		};
 
 		#panic = (): void =>
 		{
@@ -273,6 +285,14 @@ export class PostVoting extends quark.Component
 			this.#element = el;
 			this.#link = link;
 			this.#post = post;
+			const upvoteButton: QuarkHTMLElement|null = this.#element.querySelector('.r-sharp-voting *:nth-child(1)');
+			const downvoteButton: QuarkHTMLElement|null = this.#element.querySelector('.r-sharp-voting *:nth-child(3)');
+			if (upvoteButton != null && downvoteButton != null)
+			{
+				this.#upvoteButton = upvoteButton;
+				this.#downvoteButton = downvoteButton;
+			}
+			else this.#panic();
 		}
 	}
 
@@ -299,7 +319,7 @@ export class PostVoting extends quark.Component
 		votingNumbers.innerHTML = utils.prettyNumber(args.constructor.link.ups);
 		votingContainer.appendChild(votingNumbers);
 		
-		/* quark.append
+		quark.append
 		(
 			votingContainer,
 			{
@@ -308,7 +328,7 @@ export class PostVoting extends quark.Component
 				constructor: { post: args.constructor.post },
 				element: {}
 			}
-		); */
+		);
 
 		el.appendChild(votingContainer);
 

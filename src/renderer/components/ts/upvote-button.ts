@@ -67,6 +67,18 @@ export class UpvoteButton extends quark.Component
 			else this.#panic();
 		}
 
+		public update(): void
+		{
+			const downvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__upvote');
+			if (downvoteButtonIcon != null)
+			{
+				if (this.#post.quark.upvoted)
+					downvoteButtonIcon.classList.add('upvoted');
+				else
+					downvoteButtonIcon.classList.remove('upvoted');
+			}
+		}
+
 		public deripple(): void
 		{
 			this.#context.deactivate();
