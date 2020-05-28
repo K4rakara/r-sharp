@@ -108,7 +108,7 @@ export interface RedditLink
 	subreddit_subscribers: number;
 	subreddit_type: string;
 	suggested_sort?: any;
-	thumbnail: RedditImage|string;
+	thumbnail: string;
 	thumbnail_height: number;
 	thumbnail_width: number;
 	title: string;
