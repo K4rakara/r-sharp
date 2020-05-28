@@ -2,7 +2,6 @@
 import quark from '@quark.js/core';
 import { ipcRenderer } from 'electron';
 import {
-	VoteButton,
 	UpvoteButton,
 	DownvoteButton,
 	Post,
