@@ -33,27 +33,19 @@ export class RSharp
 			);
 		}
 		
-		
-
-		(async (): Promise<void> =>
+		const accountQuicklook: HTMLElement|null = document.querySelector('header #account-quicklook');
+		if (accountQuicklook != null)
 		{
-			this.currentUser = await api.account.getMe();
-			{
-				const accountQuicklook: HTMLElement|null = document.querySelector('header #account-quicklook');
-				if (accountQuicklook != null)
+			this.accountQuicklook = accountQuicklook;
+			quark.replace
+			(
+				accountQuicklook,
 				{
-					this.accountQuicklook = accountQuicklook;
-					quark.replace
-					(
-						accountQuicklook,
-						{
-							component: 'account-quicklook',
-							constructor: { me: this.currentUser },
-							element: {}
-						}
-					);
+					component: 'account-quicklook',
+					constructor: { me: api.account.getMe() },
+					element: {}
 				}
-			}
-		})();
+			);
+		}
 	}
 }
