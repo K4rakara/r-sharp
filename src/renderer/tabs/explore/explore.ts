@@ -1,6 +1,5 @@
 import quark from '@quark.js/core';
 import {
-	Card,
 	Post,
 	UpvoteButton,
 	DownvoteButton,
@@ -13,7 +12,6 @@ import * as api from '../../api';
 import * as utils from '../../utils';
 import { IfcFrame, IfcFrameEvent } from '../ifc-frame';
 
-quark.registerComponent('card', Card);
 quark.registerComponent('post', Post);
 quark.registerComponent('post__header', PostHeader);
 quark.registerComponent('post__preview', PostPreview);
