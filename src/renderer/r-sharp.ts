@@ -37,15 +37,20 @@ export class RSharp
 		if (accountQuicklook != null)
 		{
 			this.accountQuicklook = accountQuicklook;
+			const me: Promise<RedditMe> = api.account.getMe();
 			quark.replace
 			(
 				accountQuicklook,
 				{
 					component: 'account-quicklook',
-					constructor: { me: api.account.getMe() },
+					constructor: { me: me },
 					element: {}
 				}
 			);
+			me.then((me: RedditMe): void =>
+			{
+				this.currentUser = me;
+			});
 		}
 	}
 }

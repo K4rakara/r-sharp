@@ -7,6 +7,7 @@ import * as utils from '../../utils';
 interface PostConstructor
 {
 	link: RedditLink;
+	readyForFullLoad: Promise<void>;
 }
 
 interface PostArguments
@@ -142,7 +143,7 @@ export class Post extends quark.Component
 			postPreview,
 			{
 				component: 'post__preview',
-				constructor: { link: args.constructor.link },
+				constructor: { link: args.constructor.link, readyForFullLoad: args.constructor.readyForFullLoad },
 				element: {}
 			}
 		);
@@ -332,56 +333,104 @@ export class PostHeader extends quark.Component
 	}
 }
 
+enum PostPreviewType
+{
+	image = 'image',
+}
+
 export class PostPreview extends quark.Component
 {
+	static QuarkData = class
+	{
+		#element: QuarkHTMLElement;
+		#type: PostPreviewType;
+		#args: any;
+		#src?: string;
+		#img?: HTMLImageElement;
+
+		get type(): string { return this.#type; }
+
+		get src(): string|undefined { return this.#src; }
+		set src(v: string|undefined)
+		{
+			if (this.type === PostPreviewType.image)
+			{
+				if (v != null)
+				{
+					this.#src = v;
+					if (this.#img != null)
+					{
+						this.#img.src = v;
+						if (!this.#img.hasAttribute('loaded'))
+							this.#img.addEventListener('load', (): void =>
+								this.#img?.setAttribute('loaded', ''));
+					}
+					else this.#panic();
+				}
+			}
+			else console.error('Attempt to set src property on non-image PostPreview component.');
+		}
+
+		#panic = (): void =>
+		{
+			this.#element.remove();
+			console.error(utils.componentPanicMessage('PostPreview'));
+		};
+
+		constructor(el: QuarkHTMLElement, type: PostPreviewType, args: any)
+		{
+			this.#element = el;
+			this.#type = type;
+			this.#args = args;
+			switch(this.#type)
+			{
+				case PostPreviewType.image:
+					{
+						this.#src = args.src;
+						this.#img = <HTMLImageElement>this.#element.querySelector('.r-sharp-post__preview__img');
+					}
+					break;
+			}
+		}
+	}
+
 	constructor(el: QuarkHTMLElement, args: PostArguments)
 	{
 		super(el, args);
 
-		if (!args.constructor.link.media_only)
+		const link: RedditLink = args.constructor.link;
+
+		let resolveConstructComplete: () => void = (): void => {};
+		const constructComplete: Promise<PostPreviewType> = new Promise((resolve: () => void): void =>
 		{
-			if (args.constructor.link.thumbnail != null)
-				el.innerHTML +=
-					`<img class="r-sharp-post__preview__img" src="${args.constructor.link.thumbnail}"/>`;
-		
-		}
-		else
+			resolveConstructComplete = resolve;
+		});
+
+		const postPreviewContainer: HTMLDivElement = document.createElement('div');
+		postPreviewContainer.classList.add('r-sharp-post__preview');
+
+		if (!(link.media != null))
 		{
-			if (args.constructor.link.media != null)
+			if (link.thumbnail != null && link.url != null)
 			{
-				const postPreviewContainer: HTMLDivElement = document.createElement('div');
-				postPreviewContainer.classList.add('r-sharp-post__preview__text')
-				for (let i: number = 0; i < args.constructor.link.media.richtext_content.document.c.length; i++)
+				const postPreviewImage: HTMLImageElement = document.createElement('img');
+				postPreviewImage.classList.add('r-sharp-post__preview__img');
+				postPreviewImage.src = link.thumbnail;
+				postPreviewContainer.appendChild(postPreviewImage);
+
+				constructComplete.then((v: PostPreviewType): void =>
 				{
-					switch (args.constructor.link.media.richtext_content.document.e[i])
+					el.quark = new PostPreview.QuarkData(el, PostPreviewType.image, { src: link.thumbnail } );
+
+					args.constructor.readyForFullLoad.then((): void =>
 					{
-						case 'par':
-							{
-								args.constructor.link.media.richtext_content.document.c.forEach((content: string): void =>
-								{
-									postPreviewContainer.innerHTML +=
-										`<p class="r-sharp-post__preview__text-par">${
-										'\n\t'}${content}${
-										'\n'}</p>`;
-								});
-							}
-							break;
-						default:
-							{
-								args.constructor.link.media.richtext_content.document.c.forEach((content: string): void =>
-								{
-									postPreviewContainer.innerHTML +=
-										`<div class="r-sharp-post__preview__text-div">${
-										'\n\t'}${content}${
-										'\n'}</div>`;
-								});
-							}
-							break;
-					}
-				}
-				el.appendChild(postPreviewContainer);
+						el.quark.src = link.url;
+					});
+				});
 			}
-			else el.innerHTML += 'There was an error loading the post preview.';
 		}
+
+		el.appendChild(postPreviewContainer);
+		resolveConstructComplete();
 	}
 }

@@ -28,6 +28,15 @@ class Explore
 	{
 		(async (): Promise<void> =>
 		{
+			// Create a new promise that we can resolve outside of its executor callback.
+			// This allows us to load all the posts, and then tell the posts to start
+			// loading their full res images.
+			let resolveReadyForFullLoad: any;
+			const readyForFullLoad: Promise<void> = new Promise((resolve): void =>
+			{
+				resolveReadyForFullLoad = resolve;
+			});
+
 			const postsElement: HTMLElement|null = document.querySelector('main #posts');
 			if (postsElement != null)
 			{
@@ -41,11 +50,14 @@ class Explore
 						{
 							tag: 'div',
 							component: 'post',
-							constructor: { link: post.data },
+							constructor: { link: post.data, readyForFullLoad: readyForFullLoad },
 							element: {},
 						}
 					);
 				});
+
+				// Tell all the posts to load their full resolution images.
+				resolveReadyForFullLoad();
 			}
 		})();
 	}
