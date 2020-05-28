@@ -27,3 +27,4 @@ cp-dev:
 	cp ./src/renderer/error.html ./bin/renderer/; \
 	cp ./src/renderer/components/sass/reddit-font.woff ./bin/renderer/components/sass; \
 	cp -r ./src/renderer/tabs/ ./bin/renderer/; \
+	cp -r ./src/renderer/assets/ ./bin/renderer/; \
