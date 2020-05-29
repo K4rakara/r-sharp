@@ -10,6 +10,7 @@ import * as api from './api/index';
 import {_} from '../utils'; _;
 import { RedditMe } from './api/account';
 import { RedditFeed } from './api/reddit-types';
+import { RedditVoteType } from './api/link';
 
 let window: BrowserWindow|null = null;
 let webserver: http.Server|null = null;
@@ -270,6 +271,11 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 					globalState.oauthRefreshToken = split[1];
 					globalState.oauthExpiresAt = new Date(parseInt(split[2]) * 1000);
 
+					// Get "me" -- AKA the user and store stuff.
+					const me: RedditMe = await api.account.getMe(globalState.oauthAccessToken);
+					globalState.userName = me.subreddit.display_name_prefixed;
+					globalState.userId = me.id;
+
 					// Automatically refresh token if required.
 					if (new Date().isPast(globalState.oauthExpiresAt))
 						await refreshToken();
@@ -398,4 +404,18 @@ ipcMain.on('reddit:listings:best', async (e: IpcMainEvent, after?: string|null):
 			: undefined
 	);
 	e.reply('reply:reddit:listings:best', feed);
+});
+
+ipcMain.on('reddit:link:vote', async (e: IpcMainEvent, post: string, dir: RedditVoteType): Promise<void> =>
+{
+	const ok: boolean = await api.link.vote
+	(
+		post,
+		dir,
+		globalState.oauthAccessToken,
+		(globalState.userName !== '')
+			? globalState.userName
+			: undefined
+	);
+	e.reply('reply:reddit:link:vote', ok);
 });

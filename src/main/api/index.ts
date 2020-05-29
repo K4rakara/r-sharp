@@ -1,2 +1,3 @@
-export * as account from './account/index';
-export * as listings from './listings/index';
+export * as account from './account';
+export * as listings from './listings';
+export * as link from './link';

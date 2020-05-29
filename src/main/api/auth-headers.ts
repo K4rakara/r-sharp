@@ -8,7 +8,7 @@ export class AuthHeaders extends Headers
 		(
 			{
 				...headers,
-				'Authorization': `bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
 				'User-Agent': 
 				`${
 					(username != null)

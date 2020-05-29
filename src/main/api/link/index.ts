@@ -1,0 +1,1 @@
+export { RedditVoteType, vote } from './vote';

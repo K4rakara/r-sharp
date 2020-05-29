@@ -2,6 +2,8 @@ import quark from '@quark.js/core';
 import { QuarkHTMLElement } from '../../quark-element';
 import { RedditLink } from '../../../main/api/reddit-types';
 import * as utils from '../../utils';
+import * as api from '../../api';
+import { RedditVoteType } from '../../api/link';
 
 interface PostConstructor
 {
@@ -211,6 +213,14 @@ export class PostVoting extends quark.Component
 					this.#upvoted = true;
 					this.#downvoted = false;
 					this.#update();
+					api.link.vote(`t3_${this.#link.id}`, RedditVoteType.up).then((ok: boolean): void =>
+					{
+						if (!ok)
+						{
+							console.warn(`Failed to upvote "${this.#link.title}". The user will be notified.`);
+							//TODO: ADD NOTIFICATION FOR USER.
+						}
+					});
 				} else this.#panic();
 			}
 		}
@@ -228,6 +238,14 @@ export class PostVoting extends quark.Component
 					this.#upvoted = false;
 					this.#downvoted = false;
 					this.#update();
+					api.link.vote(`t3_${this.#link.id}`, RedditVoteType.none).then((ok: boolean): void =>
+					{
+						if (!ok)
+						{
+							console.warn(`Failed to unupvote "${this.#link.title}". The user will be notified.`);
+							//TODO: ADD NOTIFICATION FOR USER.
+						}
+					});
 				} else this.#panic();
 			}
 		}
@@ -246,6 +264,14 @@ export class PostVoting extends quark.Component
 					this.#upvoted = false;
 					this.#downvoted = true;
 					this.#update();
+					api.link.vote(`t3_${this.#link.id}`, RedditVoteType.down).then((ok: boolean): void =>
+					{
+						if (!ok)
+						{
+							console.warn(`Failed to downvote "${this.#link.title}". The user will be notified.`);
+							//TODO: ADD NOTIFICATION FOR USER.
+						}
+					});
 				} else this.#panic();
 			}
 		}
@@ -263,6 +289,14 @@ export class PostVoting extends quark.Component
 					this.#upvoted = false;
 					this.#downvoted = false;
 					this.#update();
+					api.link.vote(`t3_${this.#link.id}`, RedditVoteType.none).then((ok: boolean): void =>
+					{
+						if (!ok)
+						{
+							console.warn(`Failed to undownvote "${this.#link.title}". The user will be notified.`);
+							//TODO: ADD NOTIFICATION FOR USER.
+						}
+					});
 				} else this.#panic();
 			}
 		}
