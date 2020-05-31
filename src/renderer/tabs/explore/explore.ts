@@ -6,6 +6,7 @@ import {
 	PostHeader,
 	PostPreview,
 	PostVoting,
+	PostButtons,
 } from '../../components/ts';
 import { RedditLink, RedditFeed } from '../../../main/api/reddit-types';
 import * as api from '../../api';
@@ -16,6 +17,7 @@ quark.registerComponent('post', Post);
 quark.registerComponent('post__header', PostHeader);
 quark.registerComponent('post__preview', PostPreview);
 quark.registerComponent('post__voting', PostVoting);
+quark.registerComponent('post__buttons', PostButtons);
 quark.registerComponent('upvote-button', UpvoteButton);
 quark.registerComponent('downvote-button', DownvoteButton);
 

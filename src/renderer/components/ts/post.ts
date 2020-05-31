@@ -37,6 +37,8 @@ export class Post extends quark.Component
 			return false;
 		}
 
+		get link(): RedditLink { return this.#link; }
+
 		public upvote(): void
 		{
 			if (this.#voting != null)
@@ -342,7 +344,7 @@ export class PostVoting extends quark.Component
 			{
 				tag: 'div',
 				component: 'upvote-button',
-				constructor: { post: args.constructor.post },
+				constructor: { post: args.constructor.post, link: args.constructor.link },
 				element: {}
 			}
 		);
@@ -358,7 +360,7 @@ export class PostVoting extends quark.Component
 			{
 				tag: 'div',
 				component: 'downvote-button',
-				constructor: { post: args.constructor.post },
+				constructor: { post: args.constructor.post, link: args.constructor.link },
 				element: {}
 			}
 		);
@@ -491,5 +493,23 @@ export class PostPreview extends quark.Component
 
 		el.appendChild(postPreviewContainer);
 		resolveConstructComplete();
+	}
+}
+
+export class PostButtons extends quark.Component
+{
+	#QuarkData = class
+	{
+
+
+		public toggleSave(): void
+		{
+
+		}
+	}
+
+	constructor(el: QuarkHTMLElement, args: PostArguments)
+	{
+		super(el, args);
 	}
 }

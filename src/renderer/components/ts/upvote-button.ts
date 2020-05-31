@@ -2,10 +2,12 @@ import quark from '@quark.js/core';
 import { QuarkHTMLElement } from '../../quark-element';
 import { MDCRipple } from '@material/ripple';
 import dynamics from 'dynamics.js';
+import { RedditLink } from '../../../main/api/reddit-types';
 
 interface UpvoteButtonConstructor
 {
 	post: QuarkHTMLElement;
+	link: RedditLink;
 }
 
 interface UpvoteButtonArguments
@@ -69,13 +71,13 @@ export class UpvoteButton extends quark.Component
 
 		public update(): void
 		{
-			const downvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__upvote');
-			if (downvoteButtonIcon != null)
+			const upvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__upvote');
+			if (upvoteButtonIcon != null)
 			{
 				if (this.#post.quark.upvoted)
-					downvoteButtonIcon.classList.add('upvoted');
+					upvoteButtonIcon.classList.add('upvoted');
 				else
-					downvoteButtonIcon.classList.remove('upvoted');
+					upvoteButtonIcon.classList.remove('upvoted');
 			}
 		}
 
@@ -93,11 +95,16 @@ export class UpvoteButton extends quark.Component
 			console.log(`An UpvoteButton element lacked one or more critical elements for it to function, and will now be removed.`);
 		}
 
-		constructor(el: HTMLElement, post: QuarkHTMLElement, context: MDCRipple)
+		constructor(el: HTMLElement, post: QuarkHTMLElement, context: MDCRipple, likes?: boolean)
 		{
 			this.#element = el;
 			this.#post = post;
 			this.#context = context;
+			const upvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__upvote');
+			if (upvoteButtonIcon != null)
+				if (likes != null && likes) upvoteButtonIcon.classList.add('upvoted');
+				else null;
+			else this.#panic();
 		}
 	}
 
@@ -122,7 +129,7 @@ export class UpvoteButton extends quark.Component
 
 		el.addEventListener('click', (): void => el.quark.upvote());
 
-		el.quark = new this.#QuarkData(el, args.constructor.post, ctx);
+		el.quark = new this.#QuarkData(el, args.constructor.post, ctx, args.constructor.link.likes);
 	}
 
 }

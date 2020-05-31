@@ -2,10 +2,12 @@ import quark from '@quark.js/core';
 import { QuarkHTMLElement } from '../../quark-element';
 import { MDCRipple } from '@material/ripple';
 import dynamics from 'dynamics.js';
+import { RedditLink } from '../../../main/api/reddit-types';
 
 interface DownvoteButtonConstructor
 {
 	post: QuarkHTMLElement;
+	link: RedditLink;
 }
 
 interface DownvoteButtonArguments
@@ -93,11 +95,16 @@ export class DownvoteButton extends quark.Component
 			console.log(`An Downvote element lacked one or more critical elements for it to function, and will now be removed.`);
 		}
 
-		constructor(el: HTMLElement, post: QuarkHTMLElement, context: MDCRipple)
+		constructor(el: HTMLElement, post: QuarkHTMLElement, context: MDCRipple, likes?: boolean)
 		{
 			this.#element = el;
 			this.#post = post;
 			this.#context = context;
+			const downvoteButtonIcon: HTMLElement|null = this.#element.querySelector('.r-sharp-icons__downvote');
+			if (downvoteButtonIcon != null)
+				if (likes != null && !likes) downvoteButtonIcon.classList.add('downvoted');
+				else null;
+			else this.#panic();
 		}
 	}
 
@@ -122,7 +129,7 @@ export class DownvoteButton extends quark.Component
 
 		el.addEventListener('click', (): void => el.quark.downvote());
 
-		el.quark = new this.#QuarkData(el, args.constructor.post, ctx);
+		el.quark = new this.#QuarkData(el, args.constructor.post, ctx, args.constructor.link.likes);
 	}
 
 }
