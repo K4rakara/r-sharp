@@ -8,6 +8,7 @@ import {
 	AccountQuicklook,
 	ProfilePicture,
 	Tabs,
+	Tooltip,
 } from './components/ts/index';
 import * as api from './api/index';
 import { RSharp } from './r-sharp';
@@ -21,6 +22,7 @@ quark.registerComponent('post', Post);
 quark.registerComponent('account-quicklook', AccountQuicklook);
 quark.registerComponent('profile-picture', ProfilePicture);
 quark.registerComponent('tabs', Tabs);
+quark.registerComponent('tooltip', Tooltip);
 
 // Create promises for if the iframes have loaded yet.
 const exploreLoaded: Promise<IfcFrame> = new Promise((resolve: (v: IfcFrame) => void, reject): void =>
@@ -48,7 +50,8 @@ const exploreLoaded: Promise<IfcFrame> = new Promise((resolve: (v: IfcFrame) => 
 });
 
 // Create the app state.
-const rSharp: RSharp = new RSharp(exploreLoaded);
+window.rSharp = new RSharp(exploreLoaded);
+const rSharp: RSharp = window.rSharp;
 
 exploreLoaded.then((): void =>
 {
@@ -57,4 +60,33 @@ exploreLoaded.then((): void =>
 	{
 		rSharp.ifcRoot.send(rSharp.exploreFrame || new IfcFrame(), 'test');
 	});
+});
+
+rSharp.ifcRoot.on('r-sharp:set-tooltip-quick-open', (e: IfcRootEvent, to: boolean): void =>
+{
+	rSharp.tooltipQuickOpen = to;
+});
+
+rSharp.ifcRoot.on('r-sharp:get-tooltip-quick-open', (e: IfcRootEvent): void =>
+{
+	e.reply('reply:r-sharp:get-tooltip-quick-open', rSharp.tooltipQuickOpen);
+});
+
+rSharp.ifcRoot.on('r-sharp:get-tooltip-timeout', (e: IfcRootEvent): void =>
+{
+	e.reply('reply:r-sharp:get-tooltip-timeout', rSharp.tooltipStopQuickOpening);
+});
+
+rSharp.ifcRoot.on('r-sharp:start-tooltip-timeout', (e: IfcRootEvent): void =>
+{
+	rSharp.tooltipStopQuickOpening = window.setTimeout((): void =>
+	{
+		rSharp.tooltipQuickOpen = false;
+	}, 500);
+});
+
+rSharp.ifcRoot.on('r-sharp:clear-tooltip-timeout', (e: IfcRootEvent): void =>
+{
+	if (rSharp.tooltipStopQuickOpening != null) window.clearTimeout(rSharp.tooltipStopQuickOpening);
+	rSharp.tooltipStopQuickOpening = null;
 });

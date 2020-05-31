@@ -11,6 +11,8 @@ export class RSharp
 	public tabs?: HTMLElement;
 	public exploreFrame?: IfcFrame;
 	public ifcRoot: IfcRoot;
+	public tooltipQuickOpen: boolean = false;
+	public tooltipStopQuickOpening: number|null = null;
 
 	constructor(exploreFrame: Promise<IfcFrame>)
 	{

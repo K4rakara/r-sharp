@@ -1,0 +1,43 @@
+@use "../../vars.scss" as colors;
+
+:root
+{
+	.r-sharp-tooltip
+	{
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		.r-sharp-tooltip__positioner
+		{
+			width: 100%;
+			height: 100%;
+			position: relative;
+			.r-sharp-tooltip__box
+			{
+				top: calc(100% - .5em);
+				min-width: 2.5em;
+				max-width: 20em;
+				padding: .25em;
+				border-radius: .25em;
+				position: absolute;
+				text-align: center;
+				z-index: 10;
+				transform: scale(0);
+				transition-property: top, transform;
+				transition-duration: .125s;
+				transition-timing-function: ease-in-out;
+				background-color: colors.$dark-surface;
+				&[shown]
+				{
+					top: calc(100% - .25em);
+					transform: scale(1);
+					transition-property: top, transform;
+					transition-duration: .125s;
+					transition-timing-function: ease-in-out;
+				}
+			}
+		}
+	}
+}

@@ -165,6 +165,16 @@ export class Tabs extends quark.Component
 		tabsExplore.onclick = (): void => el.quark.switchTo('explore');
 		const tabsExploreContext: MDCRipple = new MDCRipple(tabsExplore);
 		tabsExplore.quark = new TabChild(tabsExplore, tabsExploreContext);
+		quark.append
+		(
+			tabsExplore,
+			{
+				tag: 'div',
+				component: 'tooltip',
+				constructor: { text: 'Explore' },
+				element: {},
+			}
+		);
 		tabsContainer.appendChild(tabsExplore);
 
 		// Chat tab
@@ -177,6 +187,16 @@ export class Tabs extends quark.Component
 		tabsChat.onclick = (): void => el.quark.switchTo('chat');
 		const tabsChatContext: MDCRipple = new MDCRipple(tabsChat);
 		tabsChat.quark = new TabChild(tabsChat, tabsChatContext);
+		quark.append
+		(
+			tabsChat,
+			{
+				tag: 'div',
+				component: 'tooltip',
+				constructor: { text: 'Chats' },
+				element: {},
+			}
+		);
 		tabsContainer.appendChild(tabsChat);
 
 		// Notifications tab
@@ -189,6 +209,16 @@ export class Tabs extends quark.Component
 		tabsNotifications.onclick = (): void => el.quark.switchTo('notifications');
 		const tabsNotificationsContext: MDCRipple = new MDCRipple(tabsNotifications);
 		tabsNotifications.quark = new TabChild(tabsNotifications, tabsNotificationsContext);
+		quark.append
+		(
+			tabsNotifications,
+			{
+				tag: 'div',
+				component: 'tooltip',
+				constructor: { text: 'Notifications' },
+				element: {},
+			}
+		);
 		tabsContainer.appendChild(tabsNotifications);
 
 		el.appendChild(tabsContainer);
