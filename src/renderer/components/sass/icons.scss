@@ -65,7 +65,7 @@
 		font-weight: normal;
 		color: colors.$dark-text;
 		&:before { content: '\f135'; }
-		&[saved]:before { content: '\f135S'; }
+		&[saved]:before { content: '\f13f'; }
 	}
 	.r-sharp-icons__hide
 	{
