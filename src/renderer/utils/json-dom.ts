@@ -58,6 +58,16 @@ export class JSONDom
 		return processChildren(this.children);
 	}
 
+	public appendTo(el: HTMLElement): void
+	{
+		const asDom: (HTMLElement|string)[] = this.toDom();
+		asDom.forEach((v: HTMLElement|string): void =>
+		{
+			if (typeof v !== 'string') el.appendChild(v);
+			else el.innerHTML += v;
+		});
+	}
+
 	constructor(from: (JsonDomNode|string|HTMLElement)[])
 	{
 		this.children = from;
