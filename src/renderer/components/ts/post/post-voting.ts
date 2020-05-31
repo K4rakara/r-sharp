@@ -3,6 +3,7 @@ import { PostArguments, PostConstructor } from './post';
 import { QuarkHTMLElement } from '../../../quark-element';
 import { RedditVoteType } from '../../../api/link';
 import { RedditLink } from '../../../../main/api/reddit-types';
+import { JSONDom } from '../../../utils/json-dom';
 import * as api from '../../../api';
 import * as utils from '../../../utils';
 
@@ -161,37 +162,44 @@ export class PostVoting extends quark.Component
 	{
 		super(el, args);
 
-		const votingContainer: HTMLElement = document.createElement('div');
-		votingContainer.classList.add('r-sharp-voting');
-		
-		quark.append
-		(
-			votingContainer,
-			{
-				tag: 'div',
-				component: 'upvote-button',
-				constructor: { post: args.constructor.post, link: args.constructor.link },
-				element: {}
-			}
-		);
+		const content: JSONDom = new JSONDom
+		([
+			{ _: 'div', $: { 'class': 'r-sharp-voting' }, '': [
+				quark.replace
+				(
+					document.createElement('div'),
+					{
+						component: 'upvote-button',
+						constructor:
+						{
+							post: args.constructor.post,
+							link: args.constructor.link,
+						},
+						element: {},
+					}
+				) || document.createElement('div'),
+				{ _: 'div', $: { 'class': 'r-sharp-voting__text' }, '': [ utils.prettyNumber(args.constructor.link.score) ] },
+				quark.replace
+				(
+					document.createElement('div'),
+					{
+						component: 'downvote-button',
+						constructor:
+						{
+							post: args.constructor.post,
+							link: args.constructor.link,
+						},
+						element: {},
+					}
+				) || document.createElement('div'),
+			] }
+		]);
 
-		const votingNumbers: HTMLElement = document.createElement('div');
-		votingNumbers.classList.add('r-sharp-voting__text');
-		votingNumbers.innerHTML = utils.prettyNumber(args.constructor.link.ups);
-		votingContainer.appendChild(votingNumbers);
-		
-		quark.append
-		(
-			votingContainer,
-			{
-				tag: 'div',
-				component: 'downvote-button',
-				constructor: { post: args.constructor.post, link: args.constructor.link },
-				element: {}
-			}
-		);
-
-		el.appendChild(votingContainer);
+		content.toDom().forEach((v: HTMLElement|string): void =>
+		{
+			if (typeof v !== 'string') el.appendChild(v);
+			else el.innerHTML += v;
+		});
 
 		el.quark = new this.#QuarkData(el, args.constructor.link, args.constructor.post);
 	}
