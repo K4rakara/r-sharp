@@ -3,11 +3,11 @@ import fs from 'fs';
 import http from 'http';
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import express from 'express';
-import fetch, { Headers } from 'node-fetch';
+import fetch, { Headers, Request, Response } from 'node-fetch';
 import btoa from 'btoa';
 import { dataDir, redditUrl, authRedirect, appToken } from '../consts';
 import * as api from './api/index';
-import {_} from '../utils'; _;
+import {_, HTTPDump} from '../utils'; _;
 import { RedditMe } from './api/account';
 import { RedditFeed } from './api/reddit-types';
 import { RedditVoteType } from './api/link';
@@ -26,8 +26,8 @@ const globalState:
 	oauthAccessToken: string;
 	oauthRefreshToken: string;
 	oauthExpiresAt?: Date;
-	userName: string;
-	userId: string;
+	userName?: string;
+	userId?: string;
 	sessionTracker: string;
 } = 
 {
@@ -39,7 +39,6 @@ const globalState:
 	oauthOtc: '',
 	oauthAccessToken: '',
 	oauthRefreshToken: '',
-	userName: '',
 	userId: '',
 	sessionTracker: '',
 };
@@ -271,14 +270,15 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 					globalState.oauthRefreshToken = split[1];
 					globalState.oauthExpiresAt = new Date(parseInt(split[2]) * 1000);
 
+					// Automatically refresh token if required.
+					if (new Date().isPast(globalState.oauthExpiresAt))
+						await refreshToken();
+
+					// This needs to happen AFTER refreshing the token otherwise we get a nasty unauthenticated error.
 					// Get "me" -- AKA the user and store stuff.
 					const me: RedditMe = await api.account.getMe(globalState.oauthAccessToken);
 					globalState.userName = me.subreddit.display_name_prefixed;
 					globalState.userId = me.id;
-
-					// Automatically refresh token if required.
-					if (new Date().isPast(globalState.oauthExpiresAt))
-						await refreshToken();
 					
 					// Set a timeout on when to refresh the token.
 					setTimeout((): void =>
@@ -324,9 +324,11 @@ const refreshToken = async (): Promise<void> =>
 				body: `grant_type=refresh_token&refresh_token=${globalState.oauthRefreshToken}`,
 				headers: new Headers
 				({
-					'Authentication': `Basic ${btoa(`${appToken}:`)}`,
+					'Authorization': `Basic ${btoa(`${appToken}:`)}`,
 					'content-type': 'application/x-www-form-urlencoded',
-					'User-Agent': `R# for Reddit -- Logged in as ${globalState.userName}`,
+					'User-Agent': (globalState.userName != null)
+						? `R# for Reddit -- Logged in as ${globalState.userName}`
+						: `R# for Reddit -- Not logged in`,
 					'x-internship': `I'm still in highschool, but an internship at Reddit would be awesome. See https://github.com/K4rakara.`
 				})
 			}
@@ -383,39 +385,43 @@ ipcMain.on('get-token', (e: IpcMainEvent): void =>
 
 ipcMain.on('reddit:account:get-me', async (e: IpcMainEvent): Promise<void> =>
 {
-	const me: RedditMe = await api.account.getMe
-	(
-		globalState.oauthAccessToken,
-		(globalState.userName !== '')
-			? globalState.userName
-			: undefined
-	);
+	const me: RedditMe = await api.account.getMe(globalState.oauthAccessToken, globalState.userName);
 	e.reply('reply:reddit:account:get-me', me);
 });
 
+/**
+ * ### `reddit:listings:best`
+ * 
+ */
 ipcMain.on('reddit:listings:best', async (e: IpcMainEvent, after?: string|null): Promise<void> =>
 {
-	const feed: RedditFeed = await api.listings.listBest
-	(
-		after ?? '',
-		globalState.oauthAccessToken,
-		(globalState.userName !== '')
-			? globalState.userName
-			: undefined
-	);
+	const feed: RedditFeed = await api.listings.listBest(after ?? '', globalState.oauthAccessToken, globalState.userName);
 	e.reply('reply:reddit:listings:best', feed);
 });
 
-ipcMain.on('reddit:link:vote', async (e: IpcMainEvent, post: string, dir: RedditVoteType): Promise<void> =>
+/**
+ * @summary Votes for a link by `fullname`.
+ * @description Votes for a link by `fullname`. Returns a boolean which is true unless errors occur.
+ * @param {string} link -- The `fullname` of the link to vote for.
+ * @param {RedditVoteType} dir -- The "direction" to vote in. 
+ * @returns {boolean}
+ */
+ipcMain.on('reddit:link:vote', async (e: IpcMainEvent, link: string, dir: RedditVoteType): Promise<void> =>
 {
-	const ok: boolean = await api.link.vote
-	(
-		post,
-		dir,
-		globalState.oauthAccessToken,
-		(globalState.userName !== '')
-			? globalState.userName
-			: undefined
-	);
+	const ok: boolean = await api.link.vote(link, dir, globalState.oauthAccessToken, globalState.userName);
 	e.reply('reply:reddit:link:vote', ok);
+});
+
+/**
+ * @summary Saves a link by `fullname`.
+ * @description Saves a link by `fullname`. Returns a boolean which is true unless errors occur.
+ * @param {string} link -- The `fullname` of the link to save.
+ * @param {boolean} [save=true] -- Wether to save or un-save the link. save by default.
+ * @returns {boolean}
+ */
+ipcMain.on('reddit:link:save', async (e: IpcMainEvent, link: string, save?: boolean): Promise<void> =>
+{
+	if (!(save != null)) save = true;
+	const ok: boolean = await api.link.save(link, save, globalState.oauthAccessToken, globalState.userName);
+	e.reply('reply:reddit:link:save', ok);
 });
