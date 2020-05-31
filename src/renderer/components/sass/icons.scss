@@ -39,4 +39,50 @@
 		color: #818384;
 		&:before { content: '\f110'; }
 	}
+	.r-sharp-icons__comment
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f10c'; }
+	}
+	.r-sharp-icons__share
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f136'; }
+	}
+	.r-sharp-icons__save
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f135'; }
+		&[saved]:before { content: '\f135S'; }
+	}
+	.r-sharp-icons__hide
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f120'; }
+	}
+	.r-sharp-icons__report
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f134'; }
+	}
 }
