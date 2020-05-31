@@ -238,7 +238,7 @@ const getToken = async (otc: string): Promise<void> =>
 /**
  * ### getTokenFromDisk
  * 
- * Retrives the Oauth access & refresh tokens, as well as when they expire from disk.
+ * Retrieves the Oauth access & refresh tokens, as well as when they expire from disk.
  * 
  * Automatically refreshes the token if required, and sets up a timeout for when to refresh it next.
  * 
