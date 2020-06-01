@@ -39,6 +39,9 @@ export class PostButtons extends quark.Component
 				&& hideButton != null
 				&& reportButton != null)
 			{
+				// Make sure the save button icon is the right one.
+				if (this.#link.saved) saveButtonIcon.setAttribute('saved', '');
+				else saveButtonIcon.removeAttribute('saved');
 
 				// Comment button interactivity.
 				commentButton.addEventListener('mouseup', (e: MouseEvent): void =>
