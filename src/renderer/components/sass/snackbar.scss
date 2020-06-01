@@ -1,0 +1,82 @@
+@use "../../vars.scss" as colors;
+
+:root
+{
+	.r-sharp-snackbar
+	{
+		--r-sharp-snackbar__color: colors.$dark-faded;
+		width: 100%;
+		height: 2em;
+		margin-bottom: .25em;
+		padding: .25em;
+		border-left-color: var(--r-sharp-snackbar__color);
+		border-left-width: 1em;
+		border-left-style: solid;
+		border-radius: 1em;
+		background-color: colors.$dark-surface;
+		&[opening]
+		{
+			animation-name: r-sharp-snackbar__opening;
+			animation-timing-function: ease-in-out;
+			animation-duration: .5s;
+			animation-fill-mode: forwards;
+		}
+		&[closing]
+		{
+			animation-name: r-sharp-snackbar__closing;
+			animation-timing-function: ease-in-out;
+			animation-duration: .5s;
+			animation-fill-mode: forwards;
+		}
+		.r-sharp-snackbar__split
+		{
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			height: 100%;
+			.r-sharp-snackbar__left
+			{
+				display: inline-flex;
+				flex-direction: row;
+				align-items: center;
+				img
+				{
+					width: 1em;
+					height: 1em;
+					object-fit: contain;
+				}
+			}
+			.r-sharp-snackbar__right
+			{
+				.r-sharp-snackbar__button
+				{
+					display: inline-flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+					height: 2em;
+					margin-left: .5em;
+					margin-right: .5em;
+					padding-left: .5em;
+					padding-right: .5em;
+					border-radius: .7em;
+					user-select: none;
+					text-align: center;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+}
+
+@keyframes r-sharp-snackbar__opening
+{
+	from { transform: translateY(2em) scale(0); }
+	to { transform: translateY(0) scale(1); }
+}
+
+@keyframes r-sharp-snackbar__closing
+{
+	from { transform: translateY(0) scale(1); }
+	to { transform: translateY(-2em) scale(0); }
+}

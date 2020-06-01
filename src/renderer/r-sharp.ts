@@ -13,6 +13,7 @@ export class RSharp
 	public ifcRoot: IfcRoot;
 	public tooltipQuickOpen: boolean = false;
 	public tooltipStopQuickOpening: number|null = null;
+	public snackbarContainer?: HTMLElement;
 
 	constructor(exploreFrame: Promise<IfcFrame>)
 	{
@@ -33,6 +34,25 @@ export class RSharp
 					element: {}
 				}
 			);
+		}
+
+		const snackbarContainer: HTMLElement|null = document.querySelector('snackbars');
+		if (snackbarContainer != null)
+		{
+			this.snackbarContainer = snackbarContainer;
+			const oldAppendChild = this.snackbarContainer.appendChild;
+			this.snackbarContainer.appendChild = (child) =>
+			{
+				const oldRemove = (<any>child).remove;
+				(<any>child).remove = () =>
+				{
+					if (this.snackbarContainer != null && this.snackbarContainer.children.length === 1)
+						this.snackbarContainer.removeAttribute('shadow');
+					oldRemove.call(child);
+				};
+				if (this.snackbarContainer != null) this.snackbarContainer.setAttribute('shadow', '');
+				return <any>oldAppendChild.call(this.snackbarContainer, child);
+			};
 		}
 		
 		const accountQuicklook: HTMLElement|null = document.querySelector('header #account-quicklook');

@@ -9,6 +9,7 @@ import {
 	ProfilePicture,
 	Tabs,
 	Tooltip,
+	Snackbar,
 } from './components/ts/index';
 import * as api from './api/index';
 import { RSharp } from './r-sharp';
@@ -23,6 +24,7 @@ quark.registerComponent('account-quicklook', AccountQuicklook);
 quark.registerComponent('profile-picture', ProfilePicture);
 quark.registerComponent('tabs', Tabs);
 quark.registerComponent('tooltip', Tooltip);
+quark.registerComponent('snackbar', Snackbar);
 
 // Create promises for if the iframes have loaded yet.
 const exploreLoaded: Promise<IfcFrame> = new Promise((resolve: (v: IfcFrame) => void, reject): void =>
@@ -62,6 +64,9 @@ exploreLoaded.then((): void =>
 	});
 });
 
+// Tooltip ifc channels.
+// ================================================================================================
+
 rSharp.ifcRoot.on('r-sharp:set-tooltip-quick-open', (e: IfcRootEvent, to: boolean): void =>
 {
 	rSharp.tooltipQuickOpen = to;
@@ -89,4 +94,23 @@ rSharp.ifcRoot.on('r-sharp:clear-tooltip-timeout', (e: IfcRootEvent): void =>
 {
 	if (rSharp.tooltipStopQuickOpening != null) window.clearTimeout(rSharp.tooltipStopQuickOpening);
 	rSharp.tooltipStopQuickOpening = null;
+});
+
+// Snackbar ifc channels
+// ================================================================================================
+
+rSharp.ifcRoot.on('r-sharp:create-snackbar', (e: IfcRootEvent, v: any): void =>
+{
+	rSharp.snackbarContainer?.appendChild
+	(
+		quark.replace
+		(
+			document.createElement('div'),
+			{
+				component: 'snackbar',
+				constructor: { ...v },
+				element: {}
+			}
+		) || document.createElement('div')
+	)
 });
