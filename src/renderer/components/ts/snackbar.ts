@@ -48,11 +48,19 @@ export class Snackbar extends quark.Component
 		this.element = el;
 
 		el.classList.add('r-sharp-snackbar');
+		el.setAttribute('opening', '');
 
 		if (args.constructor.color != null) el.style.cssText += `--r-sharp-snackbar__color: ${args.constructor.color}`;
 
 		new JSONDom
 		([
+			{ _: 'div',
+				$: { 'class': 'r-sharp-snackbar__dismiss' },
+				onmouseover: (): void => { el.style.borderLeftWidth = '2em'; },
+				onmouseout: (): void => { el.style.borderLeftWidth = '1em'; },
+				onclick: (): void => { this.close() },
+				'': [ { _: 'i', $: { 'class': 'r-sharp-icons__dismiss' } } ]
+			},
 			{ _: 'div', $: { 'class': 'r-sharp-snackbar__split' }, '': [
 				{ _: 'span', $: { 'class': 'r-sharp-snackbar__left' }, '': [
 					(() => {
@@ -115,13 +123,15 @@ export class Snackbar extends quark.Component
 								button.onclick();	
 					});
 				}
+				snackBarRight.appendChild(buttonElement);
 			});
-		}
+		} else console.log('e');
 
 		if (!args.constructor.lifespan) args.constructor.lifespan = 1500;
 
 		const animationEnd = (): void =>
 		{
+			el.removeAttribute('opening');
 			el.removeEventListener('animationend', animationEnd);
 			//this.closeTimeout = window.setTimeout((): void => this.close(), args.constructor.lifespan);
 		}

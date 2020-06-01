@@ -13,6 +13,78 @@ export class PostButtons extends quark.Component
 	{
 		#element: QuarkHTMLElement;
 		#link: RedditLink;
+		#saveButtonIcon?: HTMLElement;
+
+		private get saveButtonIcon(): HTMLElement
+		{
+			if (this.#saveButtonIcon != null)
+				return this.#saveButtonIcon;
+			else
+				this.#panic();
+			return document.createElement('div');
+		}
+
+		public save(save: boolean = true): void
+		{
+			// Back up the previous state, in case the API returns an error and we need
+			// to revert to an old state.
+			const prevState: boolean = this.#link.saved;
+
+			this.#link.saved = save;
+			
+			if (this.#link.saved) this.saveButtonIcon.setAttribute('saved', '');
+			else this.saveButtonIcon.removeAttribute('saved');
+
+			api.link.save(`t3_${this.#link.id}`, !this.#link.saved).then((ok: boolean): void =>
+			{
+				if (!ok)
+				{
+					this.#link.saved = prevState;
+
+					if (this.#link.saved) this.saveButtonIcon.setAttribute('saved', '');
+					else this.saveButtonIcon.removeAttribute('saved');
+					
+					if (window.ifcFrame != null)
+					{
+						window.ifcFrame.send
+						(
+							'r-sharp:create-snackbar',
+							{
+								text: 'Could not save post... Please try again later.',
+								color: '#FF0000'
+							}
+						);
+					}
+					else console.warn('An iFrame does not have an ifcFrame initialized in it! It will not be able to communicate with the root frame.');
+				}
+				else
+				{
+					if (window.ifcFrame != null)
+					{
+						window.ifcFrame.send
+						(
+							'r-sharp:create-snackbar',
+							{
+								text: `Post ${(this.#link.saved) ? 'saved' : 'unsaved'} successfully!`,
+								color: '#0079d3',
+								buttons:
+								[
+									{
+										type: 'custom',
+										text: 'undo',
+										onclick: (): void =>
+										{	
+											this.save(!save);
+										}
+									}
+								]
+							}
+						)
+					}
+					else console.warn('An iFrame does not have an ifcFrame initialized in it! It will not be able to communicate with the root frame.');
+				}
+			});
+		}
 
 		#panic = (): void =>
 		{
@@ -42,6 +114,8 @@ export class PostButtons extends quark.Component
 				// Make sure the save button icon is the right one.
 				if (this.#link.saved) saveButtonIcon.setAttribute('saved', '');
 				else saveButtonIcon.removeAttribute('saved');
+
+				this.#saveButtonIcon = saveButtonIcon;
 
 				// Comment button interactivity.
 				commentButton.addEventListener('mouseup', (e: MouseEvent): void =>
@@ -80,31 +154,7 @@ export class PostButtons extends quark.Component
 				{
 					if (e.button === 0)
 					{
-						// Back up the previous state, in case the API returns an error and we need
-						// to revert to an old state.
-						const prevState: boolean = this.#link.saved;
-
-						this.#link.saved = !this.#link.saved;
-						
-						if (this.#link.saved) saveButtonIcon.setAttribute('saved', '');
-						else saveButtonIcon.removeAttribute('saved');
-
-						api.link.save(`t3_${this.#link.id}`, !this.#link.saved).then((ok: boolean): void =>
-						{
-							if (!ok)
-							{
-								this.#link.saved = prevState;
-
-								if (this.#link.saved) saveButtonIcon.setAttribute('saved', '');
-								else saveButtonIcon.removeAttribute('saved');
-								
-								// TODO: Add a "Could not save post" snackbar message.
-							}
-							else
-							{
-								// TODO: Add a "post saved successfully" snackbar message.
-							}
-						});
+						this.save(!this.#link.saved);
 					}
 				});
 			}

@@ -13,7 +13,11 @@
 		border-left-width: 1em;
 		border-left-style: solid;
 		border-radius: 1em;
+		transition-property: border-left-width;
+		transition-timing-function: ease-in-out;
+		transition-duration: .5s;
 		background-color: colors.$dark-surface;
+		position: relative;
 		&[opening]
 		{
 			animation-name: r-sharp-snackbar__opening;
@@ -27,6 +31,30 @@
 			animation-timing-function: ease-in-out;
 			animation-duration: .5s;
 			animation-fill-mode: forwards;
+		}
+		.r-sharp-snackbar__dismiss
+		{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			top: 0;
+			left: -1em;
+			width: 1em;
+			height: 2.5em;
+			position: absolute;
+			transition-property: left, width;
+			transition-timing-function: ease-in-out;
+			transition-duration: .5s;
+			&:hover { left: -2em; width: 2em; }
+			.r-sharp-icons__dismiss
+			{
+				color: colors.$dark-surface;
+				transform: scale(0);
+				transition-property: transform;
+				transition-timing-function: ease-in-out;
+				transition-duration: .5s;
+			}
+			&:hover .r-sharp-icons__dismiss { transform: scale(1); }
 		}
 		.r-sharp-snackbar__split
 		{
@@ -62,6 +90,7 @@
 					border-radius: .7em;
 					user-select: none;
 					text-align: center;
+					text-transform: uppercase;
 					cursor: pointer;
 				}
 			}
