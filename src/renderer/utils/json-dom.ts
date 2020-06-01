@@ -47,6 +47,10 @@ export class JSONDom
 									thisElement.innerHTML += v;
 							});
 						}
+						Object.keys(child).forEach((key: string): void =>
+						{
+							if (key !== '_' && key !== '$' && key !== '') thisElement[key] = child[key];
+						});
 						toReturn.push(thisElement);
 					}
 					else toReturn.push(child);
