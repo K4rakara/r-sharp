@@ -13,7 +13,17 @@ export class PostButtons extends quark.Component
 	{
 		#element: QuarkHTMLElement;
 		#link: RedditLink;
+		#saveButton?: HTMLElement;
 		#saveButtonIcon?: HTMLElement;
+
+		private get saveButton(): HTMLElement
+		{
+			if (this.#saveButton != null)
+				return this.#saveButton;
+			else
+				this.#panic();
+			return document.createElement('div');
+		}
 
 		private get saveButtonIcon(): HTMLElement
 		{
@@ -32,8 +42,18 @@ export class PostButtons extends quark.Component
 
 			this.#link.saved = save;
 			
-			if (this.#link.saved) this.saveButtonIcon.setAttribute('saved', '');
-			else this.saveButtonIcon.removeAttribute('saved');
+			if (this.#link.saved)
+			{
+				this.saveButton.innerHTML = this.saveButton.innerHTML.replace(/Save/gm, 'Saved');
+				this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
+				this.saveButtonIcon.setAttribute('saved', '');
+			}
+			else
+			{
+				this.saveButton.innerHTML = this.saveButton.innerHTML.replace(/Saved/gm, 'Save');
+				this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
+				this.saveButtonIcon.removeAttribute('saved');
+			}
 
 			api.link.save(`t3_${this.#link.id}`, !this.#link.saved).then((ok: boolean): void =>
 			{
@@ -41,8 +61,18 @@ export class PostButtons extends quark.Component
 				{
 					this.#link.saved = prevState;
 
-					if (this.#link.saved) this.saveButtonIcon.setAttribute('saved', '');
-					else this.saveButtonIcon.removeAttribute('saved');
+					if (this.#link.saved)
+					{
+						this.saveButton.innerHTML = this.saveButton.innerHTML.replace(/Save/gm, 'Saved');
+						this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
+						this.saveButtonIcon.setAttribute('saved', '');
+					}
+					else
+					{
+						this.saveButton.innerHTML = this.saveButton.innerHTML.replace(/Saved/gm, 'Save');
+						this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
+						this.saveButtonIcon.removeAttribute('saved');
+					}
 					
 					if (window.ifcFrame != null)
 					{
@@ -112,10 +142,21 @@ export class PostButtons extends quark.Component
 				&& reportButton != null)
 			{
 				// Make sure the save button icon is the right one.
-				if (this.#link.saved) saveButtonIcon.setAttribute('saved', '');
-				else saveButtonIcon.removeAttribute('saved');
+				if (this.#link.saved)
+				{
+					this.saveButton.innerHTML = this.saveButton.innerHTML.replace(/Save/gm, 'Saved');
+					this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
+					this.saveButtonIcon.setAttribute('saved', '');
+				}
+				else
+				{
+					this.saveButton.innerHTML = this.saveButton.innerHTML.replace(/Saved/gm, 'Save');
+					this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
+					this.saveButtonIcon.removeAttribute('saved');
+				}
 
 				this.#saveButtonIcon = saveButtonIcon;
+				this.#saveButton = saveButton;
 
 				// Comment button interactivity.
 				commentButton.addEventListener('mouseup', (e: MouseEvent): void =>

@@ -6,7 +6,7 @@ export async function save(link: string, save: boolean, token: string, username?
 {
 	const res: Response = await fetch
 	(
-		(save)
+		(!save)
 			? `${oauthRedditUrl}/api/save`
 			: `${oauthRedditUrl}/api/unsave`,
 		{
@@ -20,6 +20,7 @@ export async function save(link: string, save: boolean, token: string, username?
 			)
 		}
 	);
+	console.log(res);
 	if (!res.ok) console.log(res);
 	return res.ok;
 }
