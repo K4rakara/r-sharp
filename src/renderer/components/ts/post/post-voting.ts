@@ -31,12 +31,13 @@ export class PostVoting extends quark.Component
 		{
 			if (!this.#upvoted)
 			{
-				if (this.#downvoted) this.#link.ups++;
+				if (this.#downvoted) this.#link.downs--;
 				this.#link.ups++;
 				const votingNumbers: HTMLElement|null = this.#element.querySelector('.r-sharp-voting__text');
 				if (votingNumbers != null)
 				{
-					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					this.#link.score = this.#link.ups - this.#link.downs;
+					votingNumbers.innerHTML = utils.prettyNumber(this.#link.score);
 					votingNumbers.setAttribute('upvoted', '');
 					votingNumbers.removeAttribute('downvoted');
 					this.#upvoted = true;
@@ -62,7 +63,8 @@ export class PostVoting extends quark.Component
 				const votingNumbers: HTMLElement|null = this.#element.querySelector('.r-sharp-voting__text');
 				if (votingNumbers != null)
 				{
-					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					this.#link.score = this.#link.ups - this.#link.downs;
+					votingNumbers.innerHTML = utils.prettyNumber(this.#link.score);
 					votingNumbers.removeAttribute('upvoted');
 					this.#upvoted = false;
 					this.#downvoted = false;
@@ -84,10 +86,12 @@ export class PostVoting extends quark.Component
 			if (!this.#downvoted)
 			{
 				if (this.#upvoted) this.#link.ups--;
+				this.#link.downs++;
 				const votingNumbers: HTMLElement|null = this.#element.querySelector('.r-sharp-voting__text');
 				if (votingNumbers != null)
 				{
-					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					this.#link.score = this.#link.ups - this.#link.downs;
+					votingNumbers.innerHTML = utils.prettyNumber(this.#link.score);
 					votingNumbers.setAttribute('downvoted', '');
 					votingNumbers.removeAttribute('upvoted');
 					this.#upvoted = false;
@@ -109,11 +113,12 @@ export class PostVoting extends quark.Component
 		{
 			if (this.#downvoted)
 			{
-				this.#link.ups++;
+				this.#link.downs--;
 				const votingNumbers: HTMLElement|null = this.#element.querySelector('.r-sharp-voting__text');
 				if (votingNumbers != null)
 				{
-					votingNumbers.innerHTML = utils.prettyNumber(this.#link.ups);
+					this.#link.score = this.#link.ups - this.#link.downs;
+					votingNumbers.innerHTML = utils.prettyNumber(this.#link.score);
 					votingNumbers.removeAttribute('downvoted');
 					this.#upvoted = false;
 					this.#downvoted = false;
