@@ -141,6 +141,9 @@ export class PostButtons extends quark.Component
 				&& hideButton != null
 				&& reportButton != null)
 			{
+				this.#saveButtonIcon = saveButtonIcon;
+				this.#saveButton = saveButton;
+
 				// Make sure the save button icon is the right one.
 				if (this.#link.saved)
 				{
@@ -154,9 +157,6 @@ export class PostButtons extends quark.Component
 					this.#saveButtonIcon = <HTMLElement>this.saveButton.querySelector('.r-sharp-icons__save') || this.#saveButton;
 					this.saveButtonIcon.removeAttribute('saved');
 				}
-
-				this.#saveButtonIcon = saveButtonIcon;
-				this.#saveButton = saveButton;
 
 				// Comment button interactivity.
 				commentButton.addEventListener('mouseup', (e: MouseEvent): void =>

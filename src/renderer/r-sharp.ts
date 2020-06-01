@@ -7,72 +7,84 @@ import { IfcFrame } from './tabs/ifc-frame';
 export class RSharp
 {
 	public currentUser?: RedditMe;
-	public accountQuicklook?: HTMLElement;
-	public tabs?: HTMLElement;
+	public accountQuicklook: HTMLElement;
+	public tabs: HTMLElement;
+	public snackbars: HTMLElement;
+
 	public exploreFrame?: IfcFrame;
 	public ifcRoot: IfcRoot;
 	public tooltipQuickOpen: boolean = false;
 	public tooltipStopQuickOpening: number|null = null;
-	public snackbarContainer?: HTMLElement;
 
 	constructor(exploreFrame: Promise<IfcFrame>)
 	{
 		this.ifcRoot = new IfcRoot();
 
 		exploreFrame.then((tab: IfcFrame): void => { this.exploreFrame = tab; });
-
-		const tabs: HTMLElement|null = document.querySelector('header #tabs');
-		if (tabs != null)
-		{
-			this.tabs = tabs;
-			quark.replace
-			(
-				tabs,
-				{
-					component: 'tabs',
-					constructor: {},
-					element: {}
-				}
-			);
-		}
-
-		const snackbarContainer: HTMLElement|null = document.querySelector('snackbars');
-		if (snackbarContainer != null)
-		{
-			this.snackbarContainer = snackbarContainer;
-			const oldAppendChild = this.snackbarContainer.appendChild;
-			this.snackbarContainer.appendChild = (child) =>
-			{
-				const oldRemove = (<any>child).remove;
-				(<any>child).remove = () =>
-				{
-					if (this.snackbarContainer != null && this.snackbarContainer.children.length === 1)
-						this.snackbarContainer.removeAttribute('shadow');
-					oldRemove.call(child);
-				};
-				if (this.snackbarContainer != null) this.snackbarContainer.setAttribute('shadow', '');
-				return <any>oldAppendChild.call(this.snackbarContainer, child);
-			};
-		}
 		
-		const accountQuicklook: HTMLElement|null = document.querySelector('header #account-quicklook');
-		if (accountQuicklook != null)
+		const globalHeader: HTMLElement|null = document.querySelector('body main header #global-header');
+		const localHeader: HTMLElement|null = document.querySelector('body main header #local-header');
+
+		if (globalHeader != null && localHeader != null)
 		{
-			this.accountQuicklook = accountQuicklook;
+			// Begin global header init ===========================================================
+
+			// Begin account quicklook init =======================================================
+
 			const me: Promise<RedditMe> = api.account.getMe();
-			quark.replace
+			this.accountQuicklook = globalHeader.appendChild
 			(
-				accountQuicklook,
-				{
-					component: 'account-quicklook',
-					constructor: { me: me },
-					element: {}
-				}
+				quark.replace
+				(
+					document.createElement('span'),
+					{ component: 'account-quicklook', constructor: { me }, element: {} }
+				)!
 			);
-			me.then((me: RedditMe): void =>
+			me.then((me: RedditMe): void => { this.currentUser = me; });
+
+			// End account quicklook init =========================================================
+
+			// Begin tabs init ====================================================================
+
+			const tabsContainer = document.createElement('div');
+			
+			this.tabs = globalHeader.appendChild
+			(
+				quark.replace
+				(
+					document.createElement('span'),
+					{ component: 'tabs', constructor: {}, element: {} }
+				)!
+			);
+
+			// End tabs init ======================================================================
+
+			// End global header init =============================================================
+
+			// Begin snackbar container init ======================================================
+
+			const snackbars: HTMLElement|null = document.querySelector('snackbars');
+			if (snackbars != null)
 			{
-				this.currentUser = me;
-			});
+				this.snackbars = snackbars;
+				const oldAppendChild = this.snackbars.appendChild;
+				this.snackbars.appendChild = (child) =>
+				{
+					const oldRemove = (<any>child).remove;
+					(<any>child).remove = () =>
+					{
+						if (this.snackbars != null && this.snackbars.children.length === 1)
+							this.snackbars.removeAttribute('shadow');
+						oldRemove.call(child);
+					};
+					if (this.snackbars != null) this.snackbars.setAttribute('shadow', '');
+					return <any>oldAppendChild.call(this.snackbars, child);
+				};
+			}
+			else throw new Error('The snackbar container could not be found. This is not a recoverable error.');
+
+			// End snackbar container init ========================================================
 		}
+		else throw new Error('Either the local header or the global header could not be found. This is not a recoverable error.');
 	}
 }

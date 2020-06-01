@@ -29,7 +29,7 @@ quark.registerComponent('snackbar', Snackbar);
 // Create promises for if the iframes have loaded yet.
 const exploreLoaded: Promise<IfcFrame> = new Promise((resolve: (v: IfcFrame) => void, reject): void =>
 {
-	const exploreElement: HTMLIFrameElement|null = document.querySelector('#explore');
+	const exploreElement: HTMLIFrameElement|null = document.querySelector('content #explore');
 	if (exploreElement != null)
 	{
 		const exploreNullable: IfcFrame|null = (<any>exploreElement.contentWindow)['ifcFrame'];
@@ -101,7 +101,7 @@ rSharp.ifcRoot.on('r-sharp:clear-tooltip-timeout', (e: IfcRootEvent): void =>
 
 rSharp.ifcRoot.on('r-sharp:create-snackbar', (e: IfcRootEvent, v: any): void =>
 {
-	rSharp.snackbarContainer?.appendChild
+	rSharp.snackbars.appendChild
 	(
 		quark.replace
 		(

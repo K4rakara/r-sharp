@@ -6,13 +6,55 @@
 	</head>
 	<body>
 		<main>
+			<!--
+			<header> -- Contains the header that is visible at all
+			times, as well as the tab-specific header.
+			-->
 			<header>
-				<span id="account-quicklook"></span>
-				<span id="tabs"></span>
+				<div id="global-header"></div>
+				<div id="local-header">
+					<header id="explore" data-index="0"></header>
+					<header id="chat" data-index="1"></header>
+					<header id="inbox" data-index="2"></header>
+				</div>
 			</header>
-			<iframe id="explore" class="tab tab__current" src="./tabs/explore/explore.html"></iframe>
-			<iframe id="chat" class="tab" src="./tabs/explore/explore.html"></iframe>
-			<iframe id="notifications" class="tab" src="./tabs/explore/explore.html"></iframe>
+			
+			<!--
+			<content> -- Contains the content of all opened tabs.
+			Each tab is in its own isolated <iframe> element.
+			-->
+			<content data-current-tab="0">
+				<iframe
+					id="explore"
+					class="r-sharp-tab-content"
+					data-index="0"
+					src="./tabs/explore/explore.html"
+					current>
+				</iframe>
+				<iframe
+					id="chat"
+					class="r-sharp-tab-content"
+					data-index="1"
+					src="about:blank">
+				</iframe>
+				<iframe
+					id="inbox"
+					class="r-sharp-tab-content"
+					data-index="2"
+					src="about:blank">
+				</iframe>
+			</content>
+			
+			<!--
+			<overlays> -- Contains any pop ups such as the share menu,
+			post quick view, and the profile menu.
+			-->
+			<overlays></overlays>
+
+			<!--
+			<snackbars> -- Contains the so-called "snackbar" popups.
+			(Snackbar is the official terminology used by Material Design.)
+			-->
 			<snackbars></snackbars>
 		</main>
 		<script>exports = {};</script>
