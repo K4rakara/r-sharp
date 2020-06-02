@@ -341,7 +341,6 @@ const refreshToken = async (): Promise<void> =>
 
 	// Save to `globalState`.
 	globalState.oauthAccessToken = res.access_token;
-	globalState.oauthRefreshToken = res.refresh_token;
 	globalState.oauthExpiresAt = (new Date()).addSeconds(res.expires_in);
 
 	// Save to disk.
