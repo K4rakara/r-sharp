@@ -102,10 +102,11 @@ export class PostButtons extends quark.Component
 									{
 										type: 'custom',
 										text: 'undo',
+										lifespan: 10000,
 										onclick: (): void =>
 										{	
 											this.save(!save);
-										}
+										},
 									}
 								]
 							}
