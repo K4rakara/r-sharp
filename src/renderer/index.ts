@@ -10,6 +10,7 @@ import {
 	Tabs,
 	Tooltip,
 	Snackbar,
+	AccountDetails,
 } from './components/ts/index';
 import * as api from './api/index';
 import { RSharp } from './r-sharp';
@@ -25,6 +26,7 @@ quark.registerComponent('profile-picture', ProfilePicture);
 quark.registerComponent('tabs', Tabs);
 quark.registerComponent('tooltip', Tooltip);
 quark.registerComponent('snackbar', Snackbar);
+quark.registerComponent('account-details', AccountDetails);
 
 // Create promises for if the iframes have loaded yet.
 const exploreLoaded: Promise<IfcFrame> = new Promise((resolve: (v: IfcFrame) => void, reject): void =>

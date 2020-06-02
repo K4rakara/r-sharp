@@ -1,0 +1,182 @@
+@use "../../vars.scss" as colors;
+
+:root
+{
+	.r-sharp-account-details
+	{
+		display: none;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		z-index: 1;
+		user-select: none;
+		&[visible] { display: block; }
+		&[opened]
+		{
+			.r-sharp-account-details__scrim { opacity: .7; }
+			.r-sharp-account-details__main { left: 0; }
+		}
+		.r-sharp-account-details__scrim
+		{
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			opacity: 0;
+			transition-property: opacity;
+			transition-timing-function: ease-in-out;
+			transition-duration: .5s;
+		}
+		.r-sharp-account-details__main
+		{
+			top: 0;
+			left: -16em;
+			width: 12em;
+			height: 100%;
+			position: absolute;
+			transition-property: left;
+			transition-timing-function: ease-in-out;
+			transition-duration: .5s;
+			background-color: colors.$dark-surface;
+			box-shadow: 0px 0px 42px 32px rgba(0, 0, 0, 0.9);
+			.r-sharp-account-details__top
+			{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				height: 14em;
+				.r-sharp-account-details__key-details
+				{
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					height: max-content;
+					padding-top: calc(12em * .25);
+					padding-bottom: calc(12em * .125);
+					.r-sharp-account-details__key-details__profile-picture
+					{
+						width: 40%;
+						margin-bottom: 1em;
+						border-radius: 50%;
+						object-fit: contain;
+					}
+					.r-sharp-account-details__key-details__user-name
+					{
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						font-weight: 600;
+						cursor: pointer;
+						i { margin-right: .25em; }
+						.r-sharp-account-details__key-details__switch-user
+						{
+							width: 1em;
+							height: 1em;
+							margin-right: .25em;
+						}
+					}
+				}
+				.r-sharp-account-details__lesser-details
+				{
+					display: flex;
+					flex-direction: row;
+					justify-content: space-between;
+					align-items: center;
+					height: max-content;
+					width: 90%;
+					.r-sharp-account-details__lesser-details__karma
+					{
+						width: 50%;
+						display: flex;
+						flex-direction: row;
+						justify-content: space-around;
+						align-items: center;
+						position: relative;
+						.r-sharp-account-details__lesser-details__karma-icon
+						{
+							width: 1.25em;
+							height: 1.25em;
+							object-fit: contain;
+							fill: colors.$dark-blue;
+						}
+						.r-sharp-account-details__lesser-details__karma-details { font-size: 0.7em; }
+					}
+					.r-sharp-account-details__lesser-details__reddit-age
+					{
+						display: flex;
+						flex-direction: row;
+						justify-content: space-around;
+						align-items: center;
+						width: 50%;
+						position: relative;
+						.r-sharp-account-details__lesser-details__reddit-age-icon
+						{
+							width: 1.25em;
+							height: 1.25em;
+							object-fit: contain;
+							fill: colors.$dark-blue;
+						}
+						.r-sharp-account-details__lesser-details__reddit-age-details { font-size: 0.7em; }
+					}
+				}
+			}
+		}
+		.r-sharp-account-details__bottom
+		{
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			height: calc(100% - 16em);
+			padding-top: 1em;
+			padding-bottom: 1em;
+			.r-sharp-account-details__buttons
+			{
+				width: 100%;
+			}
+			.r-sharp-account-details__settings
+			{
+				width: 100%;
+			}
+			& > *
+			{
+				.r-sharp-account-details__buttons__button
+				{
+					display: inline-flex;
+					flex-direction: row;
+					align-items: center;
+					width: 80%;
+					height: 2em;
+					padding-left: 10%;
+					padding-right: 10%;
+					user-select: none;
+					text-align: center;
+					font-size: 0.9em;
+					cursor: pointer;
+					.r-sharp-account-details__buttons__button-icon
+					{
+						width: 1.125em;
+						height: 1.125em;
+						padding-left: 10%;
+						padding-right: 10%;
+						object-fit: contain;
+						font-size: 16px;
+						fill: colors.$dark-faded;
+					}
+				}
+			}
+		}
+	}
+}
+
+@keyframes r-sharp-account-details__lesser-details__flip
+{
+	0% { transform: rotateX(0deg); }
+	50% { transform: scaleY(90deg); }
+	100% { transform: scaleY(180deg); }
+}

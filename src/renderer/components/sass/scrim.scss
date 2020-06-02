@@ -1,0 +1,10 @@
+@use "../../vars.scss" as colors;
+
+:root
+{
+	.r-sharp-scrim
+	{
+		opacity: .7;
+		background-color: colors.$dark-background;
+	}
+}

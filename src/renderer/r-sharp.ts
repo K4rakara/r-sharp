@@ -3,13 +3,18 @@ import * as api from './api/index';
 import { RedditMe } from "../main/api/account";
 import ifcRoot, { IfcRoot } from './tabs/ifc-root';
 import { IfcFrame } from './tabs/ifc-frame';
+import { QuarkHTMLElement } from './quark-element';
 
 export class RSharp
 {
 	public currentUser?: RedditMe;
 	public accountQuicklook: HTMLElement;
+	//@ts-ignore
+	public accountDetails: QuarkHTMLElement;
 	public tabs: HTMLElement;
 	public snackbars: HTMLElement;
+	//@ts-ignore
+	public overlays: HTMLElement;
 
 	public exploreFrame?: IfcFrame;
 	public ifcRoot: IfcRoot;
@@ -37,7 +42,17 @@ export class RSharp
 				quark.replace
 				(
 					document.createElement('span'),
-					{ component: 'account-quicklook', constructor: { me }, element: {} }
+					{ component: 'account-quicklook', constructor: { me }, element: {
+						onclick: (e: MouseEvent): void =>
+						{
+							if (e.button === 0)
+							{
+								this.accountDetails.quark.open();
+								//@ts-ignore
+								this.accountQuicklook.quark.ripple();
+							}
+						}
+					} }
 				)!
 			);
 			me.then((me: RedditMe): void => { this.currentUser = me; });
@@ -84,6 +99,31 @@ export class RSharp
 			else throw new Error('The snackbar container could not be found. This is not a recoverable error.');
 
 			// End snackbar container init ========================================================
+
+			// Begin account details init =========================================================
+			me.then((v: RedditMe): void =>
+			{
+				const overlays: HTMLElement|null = document.querySelector('overlays');
+				if (overlays != null)
+				{
+					this.overlays = overlays;
+					this.accountDetails = <QuarkHTMLElement>this.overlays.appendChild
+					(
+						quark.replace
+						(
+							document.createElement('div'),
+							{
+								component: 'account-details',
+								constructor: { me: v },
+								element: {}
+							}
+						)!
+					);
+				}
+				else throw new Error('The overlays container could not be found. This is not a recoverable error.')
+			});
+
+			// End account details init ===========================================================
 		}
 		else throw new Error('Either the local header or the global header could not be found. This is not a recoverable error.');
 	}

@@ -4,6 +4,7 @@ import { karmaSvgIcon } from '../../../consts';
 import * as utils from '../../utils';
 import { QuarkHTMLElement } from '../../quark-element';
 import { componentPanicMessage } from '../../utils/component-panic';
+import { MDCRipple } from '@material/ripple';
 
 interface AccountQuicklookConstructor { me: Promise<RedditMe> }
 
@@ -116,10 +117,24 @@ export class AccountQuicklook extends quark.Component
 		}
 	}
 
+	public ripple(): void
+	{
+		this.#context.activate();
+		window.setTimeout((): void =>
+		{
+			this.#context.deactivate();
+		}, 1);
+	}
+
+	#context: MDCRipple;
 
 	constructor(el: QuarkHTMLElement, args: AccountQuicklookArguments)
 	{
 		super(el, args);
+
+		el.classList.add('mdc-ripple-surface');
+		
+		this.#context = new MDCRipple(el);
 
 		const accountQuicklookContainer: HTMLDivElement = document.createElement('div');
 		accountQuicklookContainer.classList.add('r-sharp-account-quicklook');

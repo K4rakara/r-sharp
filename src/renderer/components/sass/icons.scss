@@ -94,4 +94,13 @@
 		color: colors.$dark-text;
 		&:before { content: '\f109'; }
 	}
+	.r-sharp-icons__dropdown
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f111'; }
+	}
 }
