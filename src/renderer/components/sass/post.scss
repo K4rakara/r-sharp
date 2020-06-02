@@ -63,6 +63,8 @@
 				justify-content: center;
 				max-width: calc(100% - 40px);
 				max-height: 512px;
+				border-radius: .7em;
+				background-color: colors.$dark-surface-light;
 				.r-sharp-post__preview__img
 				{
 					width: 100%;
