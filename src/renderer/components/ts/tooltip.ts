@@ -132,7 +132,7 @@ export class Tooltip extends quark.Component
 
 			let timeout: number|null = null;
 			
-			this.#element.addEventListener('mouseover', (): void =>
+			this.#element.addEventListener('mouseenter', (): void =>
 			{
 				if (window.rSharp != null)
 					if (window.rSharp.tooltipQuickOpen)
@@ -158,7 +158,7 @@ export class Tooltip extends quark.Component
 					});
 			});
 
-			this.#element.addEventListener('mouseout', (): void =>
+			this.#element.addEventListener('mouseleave', (): void =>
 			{
 				if (timeout != null) { clearTimeout(timeout); timeout = null; }
 				if (this.shown) this.hide();
