@@ -127,13 +127,13 @@ export class Snackbar extends quark.Component
 			});
 		} else console.log('e');
 
-		if (!args.constructor.lifespan) args.constructor.lifespan = 1500;
+		if (!(args.constructor.lifespan != null)) args.constructor.lifespan = 1500;
 
 		const animationEnd = (): void =>
 		{
 			el.removeAttribute('opening');
 			el.removeEventListener('animationend', animationEnd);
-			//this.closeTimeout = window.setTimeout((): void => this.close(), args.constructor.lifespan);
+			this.closeTimeout = window.setTimeout((): void => this.close(), args.constructor.lifespan);
 		}
 
 		el.addEventListener('animationend', animationEnd);
