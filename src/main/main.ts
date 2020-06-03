@@ -96,6 +96,7 @@ const createWindow = (): void =>
 	({
 		width: 800,
 		height: 600,
+		autoHideMenuBar: true,
 		webPreferences:
 		{
 			nodeIntegration: true,
@@ -110,8 +111,6 @@ const createWindow = (): void =>
 			login();
 		else
 			window.loadFile(path.join(__dirname, '../renderer/index.html'));
-
-	//window.removeMenu();
 };
 
 const login = async (): Promise<void> =>
@@ -277,12 +276,6 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 					// Automatically refresh token if required.
 					if (new Date().isPast(globalState.oauthExpiresAt))
 						await refreshToken();
-
-					// This needs to happen AFTER refreshing the token otherwise we get a nasty unauthenticated error.
-					// Get "me" -- AKA the user and store stuff.
-					//const me: RedditMe = await api.account.getMe(globalState.oauthAccessToken);
-					//globalState.userName = me.subreddit.display_name_prefixed;
-					//globalState.userId = me.id;
 					
 					// Set a timeout on when to refresh the token.
 					setTimeout((): void =>
