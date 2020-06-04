@@ -84,20 +84,32 @@ export class PostPreview extends quark.Component
 		{
 			if (link.thumbnail != null && link.url != null)
 			{
-				const postPreviewImage: HTMLImageElement = document.createElement('img');
-				postPreviewImage.classList.add('r-sharp-post__preview__img');
-				postPreviewImage.src = link.thumbnail;
-				postPreviewContainer.appendChild(postPreviewImage);
-
-				constructComplete.then((v: PostPreviewType): void =>
+				if (link.thumbnail !== "self" && link.thumbnail !== 'default')
 				{
-					el.quark = new PostPreview.QuarkData(el, PostPreviewType.image, { src: link.thumbnail } );
+					const postPreviewImage: HTMLImageElement = document.createElement('img');
+					postPreviewImage.classList.add('r-sharp-post__preview__img');
+					postPreviewImage.src = link.thumbnail;
+					postPreviewContainer.appendChild(postPreviewImage);
 
-					args.constructor.readyForFullLoad.then((): void =>
+					constructComplete.then((v: PostPreviewType): void =>
 					{
-						el.quark.src = link.url;
+						el.quark = new PostPreview.QuarkData(el, PostPreviewType.image, { src: link.thumbnail } );
+
+						args.constructor.readyForFullLoad.then((): void =>
+						{
+							el.quark.src = link.url;
+						});
 					});
-				});
+				}
+				else
+				{
+					if (link.thumbnail === 'self')
+					{
+						const postPreviewText: HTMLDivElement = document.createElement('div');
+						postPreviewText.innerHTML = args.constructor.link.selftext_html;
+						postPreviewContainer.appendChild(postPreviewText);
+					}
+				}
 			}
 		}
 
