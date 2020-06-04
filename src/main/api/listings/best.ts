@@ -11,7 +11,7 @@ export async function listBest(after: string|null, token: string, username?: str
 		(
 			`${oauthRedditUrl}/best${
 				(after != null)
-					? `?after=${after}`
+					? `?after=${after}&raw_json=1`
 					: ''
 			}`,
 			{
