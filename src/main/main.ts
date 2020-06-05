@@ -213,9 +213,14 @@ const getToken = async (otc: string): Promise<void> =>
 	globalState.userId = me.id;
 	
 	// Save to disk.
+	await fs.promises.access(path.join(dataDir, `${globalState.userId}/`))
+		.catch(async (): Promise<void> =>
+		{
+			await fs.promises.mkdir(path.join(dataDir, `${globalState.userId}/`));
+		});
 	await fs.promises.writeFile
 	(
-		path.join(dataDir, `oauth-${globalState.userId}.lock`),
+		path.join(dataDir, `./${globalState.userId}/oauth.lock`),
 		`${
 			globalState.oauthAccessToken
 		}\n${
@@ -254,14 +259,14 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 		.then(async (): Promise<void> =>
 		{
 			const lastAccount: string = await fs.promises.readFile(path.join(dataDir, 'last-account.dat'), 'utf8');
-			await fs.promises.access(path.join(dataDir, `oauth-${lastAccount}.lock`))
+			await fs.promises.access(path.join(dataDir, `${lastAccount}/oauth.lock`))
 				.then(async (): Promise<void> =>
 				{
 					const split: string[] = 
 					(
 						await fs.promises.readFile
 						(
-							path.join(dataDir, `oauth-${lastAccount}.lock`),
+							path.join(dataDir, `${lastAccount}/oauth.lock`),
 							'utf8'
 						)
 					).split('\n');
@@ -291,7 +296,7 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 				})
 				.catch((): void =>
 				{
-					toReturn = new Error(`The file "oauth-${lastAccount}.lock" does not exist -- But is required by "last-account.dat".`);
+					toReturn = new Error(`The file "${lastAccount}/oauth.lock" does not exist -- But is required by "last-account.dat".`);
 				})
 		})
 		.catch((): void =>
@@ -339,7 +344,7 @@ const refreshToken = async (): Promise<void> =>
 	// Save to disk.
 	await fs.promises.writeFile
 	(
-		path.join(dataDir, `oauth-${globalState.userId}.lock`),
+		path.join(dataDir, `${globalState.userId}/oauth.lock`),
 		`${
 			globalState.oauthAccessToken
 		}\n${

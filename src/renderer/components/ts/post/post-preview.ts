@@ -3,6 +3,7 @@ import { PostArguments } from './post';
 import { QuarkHTMLElement } from '../../../quark-element';
 import { RedditLink } from '../../../../main/api/reddit-types';
 import * as utils from '../../../utils';
+import { JSONDom } from '../../../utils/json-dom';
 
 enum PostPreviewType
 {
@@ -80,8 +81,64 @@ export class PostPreview extends quark.Component
 		const postPreviewContainer: HTMLDivElement = document.createElement('div');
 		postPreviewContainer.classList.add('r-sharp-post__preview');
 
+		switch (link.post_hint)
+		{
+			case 'image':
+				{
+					if (link.thumbnail.match(utils.URLMatch) != null)
+					{
+						new JSONDom([ { _: 'img', $: { 'class': 'r-sharp-post__preview__img', 'src': link.thumbnail } } ]).appendTo(postPreviewContainer);
+
+						constructComplete.then((v: PostPreviewType): void =>
+						{
+							el.quark = new PostPreview.QuarkData(el, PostPreviewType.image, { src: link.thumbnail } );
+
+							args.constructor.readyForFullLoad.then((): void =>
+							{
+								el.quark.src = link.url;
+							});
+						});
+					}
+					else
+					{
+						
+					}
+				}
+				break;
+			case 'hosted:video':
+				{
+					postPreviewContainer.innerHTML += 'Videos are not yet supported'
+				}
+				break;
+			case 'rich:video':
+				{
+
+				}
+				break;
+			case 'self':
+				{
+					new JSONDom
+					([
+						{ _: 'div', $: { 'class': 'r-sharp-post__preview__text' }, '': [ link.selftext_html, ] },
+						{ _: 'div', $: { 'class': 'r-sharp-post__preview__text-scrim' } },
+					]).appendTo(postPreviewContainer);
+					args.constructor.readyForFullLoad.then((): void =>
+						{ el.style.width = `${el.parentElement?.clientWidth}px` || el.style.width; });
+				}
+				break;
+			default:
+				{
+					console.warn(`A PostPreview component encountered an unknown preview type: ${link.post_hint}`);
+					postPreviewContainer.innerHTML += `An error occurred.`;
+				}
+				break;
+		}
+
+		/*
 		if (!(link.media != null))
 		{
+			
+			
 			if (link.thumbnail != null && link.url != null)
 			{
 				if (link.thumbnail !== "self" && link.thumbnail !== 'default')
@@ -105,13 +162,17 @@ export class PostPreview extends quark.Component
 				{
 					if (link.thumbnail === 'self')
 					{
-						const postPreviewText: HTMLDivElement = document.createElement('div');
-						postPreviewText.innerHTML = args.constructor.link.selftext_html;
-						postPreviewContainer.appendChild(postPreviewText);
+						new JSONDom
+						([
+							{ _: 'div', $: { 'class': 'r-sharp-post__preview__text' }, '': [
+								args.constructor.link.selftext_html
+							] },
+							{ _: 'div', $: { 'class': 'r-sharp-post__preview__text-scrim' } }
+						]).appendTo(postPreviewContainer);
 					}
 				}
 			}
-		}
+		}*/
 
 		el.appendChild(postPreviewContainer);
 		resolveConstructComplete();

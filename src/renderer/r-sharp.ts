@@ -1,9 +1,10 @@
 import quark from '@quark.js/core';
 import * as api from './api/index';
 import { RedditMe } from "../main/api/account";
-import ifcRoot, { IfcRoot } from './tabs/ifc-root';
+import ifcRoot, { IfcRoot, IfcRootEvent } from './tabs/ifc-root';
 import { IfcFrame } from './tabs/ifc-frame';
 import { QuarkHTMLElement } from './quark-element';
+import { RedditLink } from '../main/api/reddit-types';
 
 export class RSharp
 {
@@ -60,9 +61,7 @@ export class RSharp
 			// End account quicklook init =========================================================
 
 			// Begin tabs init ====================================================================
-
-			const tabsContainer = document.createElement('div');
-			
+	
 			this.tabs = globalHeader.appendChild
 			(
 				quark.replace
@@ -124,6 +123,31 @@ export class RSharp
 			});
 
 			// End account details init ===========================================================
+
+			// Begin ifc channels init ============================================================
+
+			this.ifcRoot.on
+			(
+				'r-sharp:show-share-menu',
+				(
+					e: IfcRootEvent,
+					data: { type: 'link:image', v: RedditLink }
+						|{ type: 'link:video', v: RedditLink }
+						|{ type: 'link:text', v: RedditLink }
+				): void =>
+				{
+					switch (data.type)
+					{
+						case 'link:image':
+							{
+
+							}
+							break;
+					}
+				}
+			);
+
+			// End ifc channels init ==============================================================
 		}
 		else throw new Error('Either the local header or the global header could not be found. This is not a recoverable error.');
 	}
