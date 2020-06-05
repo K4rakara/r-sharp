@@ -18,6 +18,7 @@ export class AccountQuicklook extends Kuudere.Component<Promise<RedditMe>>
 		karma: HTMLSpanElement;
 		coins: HTMLSpanElement;
 	};
+	#me?: RedditMe;
 
 	// Getters for all of the child elements.  If the element has been removed, the component will panic.
 	#get__children =
@@ -60,6 +61,38 @@ export class AccountQuicklook extends Kuudere.Component<Promise<RedditMe>>
 	{
 		this.#element.remove();
 		console.error(componentPanicMessage('AccountQuicklook'));
+	}
+
+	public setProfilePicture(url: string): void { this.#get__children.profilePicture().src = utils.stripImageUrl(url); }
+	public getProfilePicture(): string { return this.#get__children.profilePicture().src; }
+
+	public setKarma(v: number): void
+	{
+		this.#get__children.karma().innerHTML =
+			this.#get__children.karma().innerHTML.replace(this.#get__children.karma().innerText, `${utils.prettyNumber(v)}`);
+	}
+	public getKarma(): number { return this.#me!.link_karma + this.#me!.comment_karma; }
+
+	public setCoins(v: number): void
+	{
+		this.#get__children.coins().innerHTML =
+			this.#get__children.coins().innerHTML.replace(this.#get__children.coins().innerText, `${utils.prettyNumber(v)}`);
+		this.#me!.coins = v;
+	}
+	public getCoins(): number { try { return this.#me!.coins; } catch(err) { return 0; } }
+
+	public setMe(v: RedditMe): void
+	{
+		this.#me = v;
+		this.setCoins(v.coins);
+		this.setProfilePicture(v.icon_img);
+		this.setKarma(v.comment_karma + v.link_karma);
+	}
+
+	public getMe(): RedditMe|undefined
+	{
+		if (this.#me != null) return this.#me;
+		else return;
 	}
 
 	constructor(el: Kuudere.HTMLKuudereComponent<AccountQuicklook>, args: Kuudere.Arguments<Promise<RedditMe>>)
@@ -118,6 +151,8 @@ export class AccountQuicklook extends Kuudere.Component<Promise<RedditMe>>
 
 			this.#get__children.coins().innerHTML = this.#get__children.coins().innerHTML.replace(/42/gm, utils.prettyNumber(me.coins));
 			this.#get__children.coins().setAttribute('loaded', '');
+
+			this.#me = me;
 		});
 	}
 }
