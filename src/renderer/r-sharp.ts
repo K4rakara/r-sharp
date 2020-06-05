@@ -1,4 +1,6 @@
 import quark from '@quark.js/core';
+import * as Kuudere from 'kuudere';
+import { AccountQuicklook } from './components/ts/account-quicklook';
 import * as api from './api/index';
 import { RedditMe } from "../main/api/account";
 import ifcRoot, { IfcRoot, IfcRootEvent } from './tabs/ifc-root';
@@ -38,24 +40,22 @@ export class RSharp
 			// Begin account quicklook init =======================================================
 
 			const me: Promise<RedditMe> = api.account.getMe();
-			this.accountQuicklook = globalHeader.appendChild
+			this.accountQuicklook = Kuudere.constructComponent
 			(
-				quark.replace
-				(
-					document.createElement('span'),
-					{ component: 'account-quicklook', constructor: { me }, element: {
-						onclick: (e: MouseEvent): void =>
+				'span',
+				AccountQuicklook,
+				{
+					constructor: me,
+					listeners:
+					{
+						'mouseup': (e: MouseEvent): void =>
 						{
-							if (e.button === 0)
-							{
-								this.accountDetails.quark.open();
-								//@ts-ignore
-								this.accountQuicklook.quark.ripple();
-							}
+							this.accountDetails.quark.open();
 						}
-					} }
-				)!
+					}
+				}
 			);
+			globalHeader.appendChild(this.accountQuicklook);
 			me.then((me: RedditMe): void => { this.currentUser = me; });
 
 			// End account quicklook init =========================================================
