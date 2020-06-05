@@ -8,6 +8,9 @@ import { componentPanicMessage } from '../../utils/component-panic';
 import { MDCRipple } from '@material/ripple';
 import { getDefaultProfilePictureUrl } from '../../utils/get-default-pic';
 
+/**
+ * @summary Provides a component that shows details about the current user at a glance.
+ */
 export class AccountQuicklook extends Kuudere.Component<Promise<RedditMe>>
 {
 	#element: Kuudere.HTMLKuudereComponent<AccountQuicklook>;
@@ -63,14 +66,33 @@ export class AccountQuicklook extends Kuudere.Component<Promise<RedditMe>>
 		console.error(componentPanicMessage('AccountQuicklook'));
 	}
 
+	/**
+	 * @summary Sets the profile picture `src` attribute.
+	 * @description Does not alter their actual profile picture. Used when switching accounts.
+	 * @param url The URL to set the profile picture to.
+	 */
 	public setProfilePicture(url: string): void { this.#get__children.profilePicture().src = utils.stripImageUrl(url); }
+	/**
+	 * @summary Gets the `src` attribute of the profile picture.
+	 * @returns {string} URL - The `src` attribute of the profile picture.
+	 */
 	public getProfilePicture(): string { return this.#get__children.profilePicture().src; }
 
+	/**
+	 * @summary _Visually_ modifies the users karma.
+	 * @description Does not alter their actual karma. Used when switching accounts.
+	 * @param {number} karma - The value to set karma to.
+	 */
 	public setKarma(v: number): void
 	{
 		this.#get__children.karma().innerHTML =
 			this.#get__children.karma().innerHTML.replace(this.#get__children.karma().innerText, `${utils.prettyNumber(v)}`);
 	}
+	/**
+	 * @summary Gets the _actual_ value of the users karma.
+	 * @description ...
+	 * @returns {number} karma - The value of the users karma.
+	 */
 	public getKarma(): number { return this.#me!.link_karma + this.#me!.comment_karma; }
 
 	public setCoins(v: number): void
