@@ -736,10 +736,10 @@ keyv@^3.0.0:
   dependencies:
     json-buffer "3.0.0"
 
-kuudere@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/kuudere/-/kuudere-0.0.2.tgz#3ee05d3abc1f37f5889184380374afa1e3198fe8"
-  integrity sha512-tG5QvwnrpEVdjjGm6EtjWcngBvG3KJGR1Day2fkmX8b5IZLH1XM4rdOtJ7+l9OaNb4MOK/ELDwCCJHk+gZhrjw==
+kuudere@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/kuudere/-/kuudere-0.0.3.tgz#d667eac73dbfbbbb19de1488d967c79b362e3a08"
+  integrity sha512-DQWqpcffPc3LR9ASbNGz3SYPnVUjwDjFGqbVMNh4Xep40NbVQJdF0+7jcPV6h6QP8nBHvX3AjgfNBHudsXm21w==
 
 lodash@^4.17.10:
   version "4.17.15"
