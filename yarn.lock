@@ -736,10 +736,10 @@ keyv@^3.0.0:
   dependencies:
     json-buffer "3.0.0"
 
-kuudere@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/kuudere/-/kuudere-0.0.3.tgz#d667eac73dbfbbbb19de1488d967c79b362e3a08"
-  integrity sha512-DQWqpcffPc3LR9ASbNGz3SYPnVUjwDjFGqbVMNh4Xep40NbVQJdF0+7jcPV6h6QP8nBHvX3AjgfNBHudsXm21w==
+"kuudere@file:../../web/kuudere":
+  version "0.0.6"
+  dependencies:
+    webscript "^0.2.0"
 
 lodash@^4.17.10:
   version "4.17.15"
@@ -1191,6 +1191,11 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+
+webscript@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/webscript/-/webscript-0.2.0.tgz#df563dbf2edfccaf5d1d431479b346e142a886ef"
+  integrity sha512-+GCb68T8gG3aKBkEpCl6D/eBzYW6FDaoWq2LuEJWGYUh00J8+FFlx7AmyAfXJAVIKX1WSVv06vLo9BhXnaFn5w==
 
 wrappy@1:
   version "1.0.2"
