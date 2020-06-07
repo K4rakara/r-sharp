@@ -1,0 +1,18 @@
+
+@mixin r-sharp-button-generic
+{
+	display: inline-flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	height: 2em;
+	margin-left: .5em;
+	margin-right: .5em;
+	padding-left: .5em;
+	padding-right: .5em;
+	border-radius: .7em;
+	user-select: none;
+	text-align: center;
+	text-transform: uppercase;
+	cursor: pointer;
+}

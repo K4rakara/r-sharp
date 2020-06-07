@@ -1,23 +1,18 @@
 @use "../../vars.scss" as colors;
+@use "./mixins.scss" as mixins;
 
 :root
 {
 	.r-sharp-snackbar
 	{
-		--r-sharp-snackbar__color: colors.$dark-faded;
+		--r-sharp-snackbar__color: #818384; //colors.$dark-faded;
 		width: 100%;
 		height: 2em;
 		margin-bottom: .25em;
 		padding: .25em;
-		border-left-color: var(--r-sharp-snackbar__color);
-		border-left-width: 1em;
-		border-left-style: solid;
 		border-radius: 1em;
-		transition-property: border-left-width;
-		transition-timing-function: ease-in-out;
-		transition-duration: .5s;
-		background-color: colors.$dark-surface;
 		position: relative;
+		background-color: colors.$dark-surface;
 		&[opening]
 		{
 			animation-name: r-sharp-snackbar__opening;
@@ -32,20 +27,23 @@
 			animation-duration: .5s;
 			animation-fill-mode: forwards;
 		}
-		.r-sharp-snackbar__dismiss
+		.r-sharp-snackbar__left
 		{
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			top: 0;
-			left: -1em;
+			left: 0;
 			width: 1em;
 			height: 2.5em;
+			border-top-left-radius: 1em;
+			border-bottom-left-radius: 1em;
 			position: absolute;
 			transition-property: left, width;
 			transition-timing-function: ease-in-out;
 			transition-duration: .5s;
-			&:hover { left: -2em; width: 2em; }
+			background-color: var(--r-sharp-snackbar__color);
+			&:hover { left: 0em; width: 2em; }
 			.r-sharp-icons__dismiss
 			{
 				color: colors.$dark-surface;
@@ -56,42 +54,43 @@
 			}
 			&:hover .r-sharp-icons__dismiss { transform: scale(1); }
 		}
-		.r-sharp-snackbar__split
+		.r-sharp-snackbar__right
 		{
 			display: flex;
-			justify-content: space-between;
-			width: 100%;
+			justify-content: center;
+			align-items: center;
+			top: 0;
+			left: 1em;
+			width: calc(100% - 1em);
 			height: 100%;
-			.r-sharp-snackbar__left
+			position: absolute;
+			transition-property: left, width;
+			transition-timing-function: ease-in-out;
+			transition-duration: .5s;
+			.r-sharp-snackbar__split
 			{
-				display: inline-flex;
-				flex-direction: row;
+				display: flex;
+				justify-content: space-between;
 				align-items: center;
-				img
-				{
-					width: 1em;
-					height: 1em;
-					object-fit: contain;
-				}
-			}
-			.r-sharp-snackbar__right
-			{
-				.r-sharp-snackbar__button
+				width: 100%;
+				height: 100%;
+				padding-left: .5em;
+				.r-sharp-snackbar__split__left
 				{
 					display: inline-flex;
 					flex-direction: row;
-					justify-content: center;
 					align-items: center;
-					height: 2em;
-					margin-left: .5em;
-					margin-right: .5em;
-					padding-left: .5em;
-					padding-right: .5em;
-					border-radius: .7em;
-					user-select: none;
-					text-align: center;
-					text-transform: uppercase;
-					cursor: pointer;
+					img
+					{
+						width: 1em;
+						height: 1em;
+						padding-right: .5em;
+						object-fit: contain;
+					}
+				}
+				.r-sharp-snackbar__split__right
+				{
+					.r-sharp-snackbar__button { @include mixins.r-sharp-button-generic; }
 				}
 			}
 		}

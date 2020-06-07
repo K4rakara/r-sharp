@@ -81,7 +81,8 @@ export class PostButtons extends quark.Component
 							'r-sharp:create-snackbar',
 							{
 								text: 'Could not save post... Please try again later.',
-								color: '#FF0000'
+								color: '#FF0000',
+								icon: 'file:assets/snoo_facepalm.png',
 							}
 						);
 					}

@@ -1,5 +1,6 @@
 // Imports.
 import quark from '@quark.js/core';
+import * as Kuudere from 'kuudere';
 import { ipcRenderer } from 'electron';
 import {
 	UpvoteButton,
@@ -25,7 +26,6 @@ quark.registerComponent('account-quicklook', AccountQuicklook);
 quark.registerComponent('profile-picture', ProfilePicture);
 quark.registerComponent('tabs', Tabs);
 quark.registerComponent('tooltip', Tooltip);
-quark.registerComponent('snackbar', Snackbar);
 quark.registerComponent('account-details', AccountDetails);
 
 // Create promises for if the iframes have loaded yet.
@@ -103,16 +103,5 @@ rSharp.ifcRoot.on('r-sharp:clear-tooltip-timeout', (e: IfcRootEvent): void =>
 
 rSharp.ifcRoot.on('r-sharp:create-snackbar', (e: IfcRootEvent, v: any): void =>
 {
-	rSharp.snackbars.appendChild
-	(
-		quark.replace
-		(
-			document.createElement('div'),
-			{
-				component: 'snackbar',
-				constructor: { ...v },
-				element: {}
-			}
-		) || document.createElement('div')
-	)
+	rSharp.snackbars.appendChild(Kuudere.constructComponent('div', Snackbar, { constructor: { ...v } }))
 });
