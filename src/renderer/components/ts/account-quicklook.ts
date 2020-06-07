@@ -1,12 +1,9 @@
-import quark from '@quark.js/core';
 import * as Kuudere from 'kuudere';
-import { RedditMe } from '../../../main/api/account';
-import { karmaSvgIcon } from '../../../consts';
 import * as utils from '../../utils';
-import { QuarkHTMLElement } from '../../quark-element';
 import { componentPanicMessage } from '../../utils/component-panic';
-import { MDCRipple } from '@material/ripple';
 import { getDefaultProfilePictureUrl } from '../../utils/get-default-pic';
+import { MDCRipple } from '@material/ripple';
+import { RedditMe } from '../../../main/api/account';
 
 /**
  * @summary Provides a component that shows details about the current user at a glance.
