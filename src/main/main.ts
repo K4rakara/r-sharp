@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import http from 'http';
-import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent, nativeImage, dialog } from 'electron';
 import express from 'express';
 import fetch, { Headers, Request, Response } from 'node-fetch';
 import btoa from 'btoa';
@@ -28,6 +28,10 @@ const globalState:
 	oauthExpiresAt?: Date;
 	userName?: string;
 	userId?: string;
+	userPrefs:
+	{
+		lastDirectory?: string;
+	};
 	sessionTracker: string;
 } = 
 {
@@ -40,6 +44,7 @@ const globalState:
 	oauthAccessToken: '',
 	oauthRefreshToken: '',
 	userId: '',
+	userPrefs: {},
 	sessionTracker: '',
 };
 
@@ -277,6 +282,7 @@ const getTokenFromDisk = async (): Promise<void|Error> =>
 					globalState.oauthExpiresAt = new Date(parseInt(split[2]) * 1000);
 					globalState.userName = split[3];
 					globalState.userId = lastAccount;
+					await getPrefsFromDisk();
 
 					// Automatically refresh token if required.
 					if (new Date().isPast(globalState.oauthExpiresAt))
@@ -360,6 +366,33 @@ const refreshToken = async (): Promise<void> =>
 	setTimeout((): void => { refreshToken(); }, res.expires_in * 1000 - (1000 * 60));
 };
 
+/**
+ * TODO: Docs
+ */
+const getPrefsFromDisk = async (): Promise<void> =>
+{
+	const prefsFile: string = path.join(dataDir, `${globalState.userId}/config.rsharp.json`);
+	await fs.promises.access(prefsFile)
+		.then(async (): Promise<void> =>
+		{
+			globalState.userPrefs = JSON.parse(await fs.promises.readFile(prefsFile, 'utf8'));
+		})
+		.catch(async (): Promise<void> =>
+		{
+			globalState.userPrefs = {};
+			await fs.promises.writeFile(prefsFile, '{}');
+		});
+};
+
+/**
+ * TODO: DOCs
+ */
+const savePrefsToDisk = async (): Promise<void> =>
+{
+	const prefsFile: string = path.join(dataDir, `${globalState.userId}/config.rsharp.json`);
+	await fs.promises.writeFile(prefsFile, JSON.stringify(globalState.userPrefs), 'utf8');
+};
+
 app.whenReady().then(async (): Promise<void> =>
 {
 	await prep();
@@ -427,4 +460,45 @@ ipcMain.on('reddit:link:save', async (e: IpcMainEvent, link: string, save?: bool
 	if (!(save != null)) save = true;
 	const ok: boolean = await api.link.save(link, save, globalState.oauthAccessToken, globalState.userName);
 	e.reply('reply:reddit:link:save', ok);
+});
+
+/**
+ * @name ipcMain.r-sharp.io.save-image-from-url
+ * @summary Accepts a URL and proceeds to save the image content from said URL.
+ * @param {string} url - The URL to the image.
+ * @returns {boolean} - Wether or not the operation was successful.
+ */
+ipcMain.on('r-sharp:io:save-image-from-url', async (e: IpcMainEvent, url: string): Promise<void> =>
+{
+	try
+	{
+		const arr: ArrayBuffer = await (await fetch(url)).arrayBuffer();
+		const result = await dialog.showSaveDialog
+		(
+			window!,
+			{
+				title: `Saving ${url}`,
+				defaultPath: ((): string =>
+				{
+					if (globalState.userPrefs.lastDirectory != null)
+						return globalState.userPrefs.lastDirectory!;
+					else
+						if (process.platform === 'linux')
+							return path.join('/home/', process.env.USER!)
+						else if (process.platform === 'win32')
+							return 'C:/';
+						else
+							return '';
+				})()
+			}
+		);
+		if (!result.canceled)
+		{
+			await fs.promises.writeFile(result.filePath!, Buffer.from(arr));
+			globalState.userPrefs.lastDirectory = path.parse(result.filePath!).dir;
+			await savePrefsToDisk();
+		}
+		e.reply('reply:r-sharp:io:save-image-from-url', !result.canceled);
+	}
+	catch(err) { e.reply('reply:r-sharp:io:save-image-from-url', false); }
 });

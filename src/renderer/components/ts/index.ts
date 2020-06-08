@@ -7,3 +7,4 @@ export { Tabs } from './tabs';
 export { Tooltip } from './tooltip'; 
 export { Snackbar } from './snackbar';
 export { AccountDetails } from './account-details';
+export { ShareMenu } from './share-menu';

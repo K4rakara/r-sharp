@@ -1,6 +1,7 @@
 import quark from '@quark.js/core';
 import * as Kuudere from 'kuudere';
 import { AccountQuicklook } from './components/ts/account-quicklook';
+import { ShareMenu } from './components/ts/share-menu';
 import * as api from './api/index';
 import { RedditMe } from "../main/api/account";
 import ifcRoot, { IfcRoot, IfcRootEvent } from './tabs/ifc-root';
@@ -131,19 +132,27 @@ export class RSharp
 				'r-sharp:show-share-menu',
 				(
 					e: IfcRootEvent,
-					data: { type: 'link:image', v: RedditLink }
-						|{ type: 'link:video', v: RedditLink }
-						|{ type: 'link:text', v: RedditLink }
+					data: { type: 'link:image', v: RedditLink, el: QuarkHTMLElement }
+						|{ type: 'link:video', v: RedditLink, el: QuarkHTMLElement }
+						|{ type: 'link:text', v: RedditLink, el: QuarkHTMLElement }
 				): void =>
 				{
-					switch (data.type)
-					{
-						case 'link:image':
+					this.overlays.appendChild
+					(
+						Kuudere.constructComponent
+						(
+							'div',
+							ShareMenu,
 							{
-
+								constructor:
+								{
+									link: data.v,
+									type: data.type,
+									post: data.el,
+								}
 							}
-							break;
-					}
+						)
+					)
 				}
 			);
 

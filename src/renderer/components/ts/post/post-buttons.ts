@@ -80,7 +80,7 @@ export class PostButtons extends quark.Component
 						(
 							'r-sharp:create-snackbar',
 							{
-								text: 'Could not save post... Please try again later.',
+								text: `Could not ${(this.#link.saved) ? 'save' : 'unsave'} post... Please try again later.`,
 								color: '#FF0000',
 								icon: 'file:assets/snoo_facepalm.png',
 							}
@@ -116,6 +116,23 @@ export class PostButtons extends quark.Component
 					else console.warn('An iFrame does not have an ifcFrame initialized in it! It will not be able to communicate with the root frame.');
 				}
 			});
+		}
+
+		public share(): void
+		{
+			if (window.ifcFrame != null)
+			{
+				window.ifcFrame.send
+				(
+					'r-sharp:show-share-menu',
+					{
+						type: `link:${this.#link.post_hint}`,
+						v: this.#link,
+						el: this.#element,
+					}
+				)
+			}
+			else console.warn('An iFrame does not have an ifcFrame initialized in it! It will not be able to communicate with the root frame.');
 		}
 
 		#panic = (): void =>
@@ -188,7 +205,7 @@ export class PostButtons extends quark.Component
 				{
 					if (e.button === 0)
 					{
-						// TODO: Open a sharing menu over top of the post.
+						this.share();
 					}
 				});
 
