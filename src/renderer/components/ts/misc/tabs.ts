@@ -1,6 +1,6 @@
 import quark from '@quark.js/core';
 import { MDCRipple } from '@material/ripple';
-import { QuarkHTMLElement } from '../../quark-element';
+import { QuarkHTMLElement } from '../../../quark-element';
 
 export class Tabs extends quark.Component
 {

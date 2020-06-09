@@ -1,8 +1,8 @@
 import quark from '@quark.js/core';
-import { QuarkHTMLElement } from '../../quark-element';
-import { JSONDom } from '../../utils/json-dom';
-import { RedditMe } from '../../../main/api/account';
-import * as utils from '../../utils';
+import { QuarkHTMLElement } from '../../../quark-element';
+import { JSONDom } from '../../../utils/json-dom';
+import { RedditMe } from '../../../../main/api/account';
+import * as utils from '../../../utils';
 import { MDCRipple } from '@material/ripple';
 
 interface AccountDetailsConstructor

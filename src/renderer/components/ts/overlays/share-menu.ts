@@ -1,11 +1,11 @@
 import * as Kuudere from 'kuudere';
-import * as utils from '../../utils'; utils.element._;
-import { RedditLink } from '../../../main/api/reddit-types';
+import * as utils from '../../../utils'; utils.element._;
+import { RedditLink } from '../../../../main/api/reddit-types';
 import { MDCRipple } from '@material/ripple';
 import { ipcRenderer, clipboard, nativeImage, IpcRendererEvent } from 'electron';
-import { redditUrl } from '../../../consts';
-import { Snackbar } from './snackbar';
-import { QuarkHTMLElement } from '../../quark-element';
+import { redditUrl } from '../../../../consts';
+import { Snackbar } from '../snackbar';
+import { QuarkHTMLElement } from '../../../quark-element';
 
 interface ShareMenuConstructor
 {

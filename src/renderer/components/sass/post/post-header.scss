@@ -1,0 +1,23 @@
+@use "../../../vars.scss" as colors;
+
+:root
+{
+	.r-sharp-post__header
+	{
+		width: 100%;
+		height: max-content;
+		margin-top: .5em;
+		margin-bottom: .5em;
+		.r-sharp-post__header__via
+		{
+			display: inline-flex;
+			flex-direction: row;
+			align-items: center;
+			font-size: 12px;
+			* { margin-left: .125em; margin-right: .125em; }
+			.r-sharp-post__header__via__subreddit { font-weight: 600; }
+			.r-sharp-post__header__via__subreddit:after { content: '•'; }
+		}
+		.r-sharp-post__header__title { font-size: 18px; }
+	}
+}

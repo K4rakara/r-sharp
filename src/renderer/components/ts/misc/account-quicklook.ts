@@ -1,9 +1,9 @@
 import * as Kuudere from 'kuudere';
-import * as utils from '../../utils';
-import { componentPanicMessage } from '../../utils/component-panic';
-import { getDefaultProfilePictureUrl } from '../../utils/get-default-pic';
+import * as utils from '../../../utils';
+import { componentPanicMessage } from '../../../utils/component-panic';
+import { getDefaultProfilePictureUrl } from '../../../utils/get-default-pic';
 import { MDCRipple } from '@material/ripple';
-import { RedditMe } from '../../../main/api/account';
+import { RedditMe } from '../../../../main/api/account';
 
 /**
  * @summary Provides a component that shows details about the current user at a glance.

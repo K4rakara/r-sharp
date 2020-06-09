@@ -1,7 +1,7 @@
 import quark from '@quark.js/core';
 import * as Kuudere from 'kuudere';
-import { AccountQuicklook } from './components/ts/account-quicklook';
-import { ShareMenu } from './components/ts/share-menu';
+import { AccountQuicklook } from './components/ts/misc';
+import { AccountDetails, ShareMenu } from './components/ts/overlays';
 import * as api from './api/index';
 import { RedditMe } from "../main/api/account";
 import ifcRoot, { IfcRoot, IfcRootEvent } from './tabs/ifc-root';

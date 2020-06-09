@@ -1,0 +1,50 @@
+@use "../../../vars.scss" as colors;
+@use "../animations.scss" as animations;
+
+:root
+{
+	.r-sharp-post
+	{
+		width: 100%;
+		min-height: calc(2em + 16px + (1.5em * 2));
+		border-radius: 1em;
+		margin-top: 2em;
+		margin-bottom: 2em;
+		animation-name: r-sharp-post__slide-in;
+		animation-duration: 1s;
+		animation-fill-mode: forwards;
+		animation-timing-function: ease-out;
+		background-color: colors.$dark-surface;
+		.r-sharp-post__left
+		{
+			display: inline-flex;
+			flex-direction: column;
+			width: 40px;
+			height: 100%;
+			margin-left: 1em;
+			margin-right: 1em;
+			.r-sharp-post__voting
+			{
+				display: inline-flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+				height: 20%;
+				.r-sharp-voting { top: 1em; position: relative; }
+			}
+		}
+		.r-sharp-post__right
+		{
+			display: inline-flex;
+			flex-direction: column;
+			width: calc(100% - 40px - 2em);
+			height: 100%;
+		}
+	}
+}
+
+@keyframes r-sharp-post__slide-in
+{
+	from { transform: translateY(64px); opacity: 0; }
+	to { transform: translateY(0px); opacity: 1; }
+}
