@@ -6,19 +6,20 @@ import { ipcRenderer, clipboard, nativeImage, IpcRendererEvent } from 'electron'
 import { redditUrl } from '../../../../consts';
 import { Snackbar } from '../snackbar';
 import { QuarkHTMLElement } from '../../../quark-element';
+import { Post } from '../post';
 
 interface ShareMenuConstructor
 {
 	type: string;
 	link: RedditLink;
-	post: QuarkHTMLElement;
+	post: Kuudere.HTMLKuudereComponent<Post>;
 }
 
 export class ShareMenu extends Kuudere.Component<ShareMenuConstructor>
 {
 	#element: Kuudere.HTMLKuudereComponent<ShareMenu>;
 
-	#postElement: QuarkHTMLElement;
+	#postElement: Kuudere.HTMLKuudereComponent<Post>;
 
 	#type: string;
 
@@ -172,7 +173,7 @@ export class ShareMenu extends Kuudere.Component<ShareMenuConstructor>
 
 	public toggleSave(): void
 	{
-		this.#postElement.quark.save(!this.#link.saved);
+		this.#postElement.__props.save(!this.#link.saved);
 	}
 
 	public close(): void
