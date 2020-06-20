@@ -103,4 +103,13 @@
 		color: colors.$dark-text;
 		&:before { content: '\f111'; }
 	}
+	.r-sharp-icons__give-award
+	{
+		vertical-align: text-top;
+		font-family: 'Reddit font';
+		font-style: normal;
+		font-weight: normal;
+		color: colors.$dark-text;
+		&:before { content: '\f11e'; }
+	}
 }

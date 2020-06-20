@@ -15,7 +15,7 @@ const months: { [key: number]: string; } =
 };
 
 
-export function prettyTimestampRelative(v: Date): string
+export function prettyTimestampRoughRelative(v: Date): string
 {
 	const elapsed: Date = new Date(new Date().getTime() - v.getTime());
 
@@ -64,7 +64,54 @@ export function prettyTimestampRelative(v: Date): string
 		return 'Just now';
 }
 
-export function prettyTimestampStatic(v: Date): string
+export function prettyTimestampRoughStatic(v: Date): string
+{
+	const minutes: number = v.getMinutes();
+	const hours: number = v.getHours();
+	const day: number = v.getDate();
+	const month: number = v.getMonth();
+	const year: number = v.getFullYear() - 1970;
+
+	if (year >= 1)
+	{
+		if (year >= 3)
+			return `${year} years ago`;
+		else
+		{
+			if (month >= 1)
+				return `${year} year${(year > 1) ? 's' : ''}, ${month} month${(month > 1) ? 's' : ''} ago`;
+			else
+				return `${year} year${(year > 1) ? 's' : ''} ago`;
+		}
+	}
+	else if (month >= 1)
+	{
+		if (month >= 6)
+			return `${month} months ago`;
+		else
+		{
+			if (day >= 1)
+				return `${month} month${(month > 1) ? 's' : ''}, ${day} day${(day > 1) ? 's' : ''} ago`;
+			else
+				return `${month} month${(month > 1) ? 's' : ''} ago`;
+		}
+	}
+	else if (day >= 1)
+	{
+		if (day >= 7)
+			return `${Math.round(day / 7)} week${(Math.round(day / 7) > 1) ? 's' : ''} ago`;
+		else
+			return `${day} day${(day > 1) ? 's' : ''} ago`;
+	}
+	else if (hours >= 1)
+		return `${hours} hour${(hours > 1) ? 's' : ''} ago`;
+	else if (minutes >= 1)
+		return `${minutes} minute${(minutes > 1) ? 's' : ''} ago`;
+	else
+		return 'Just now';
+}
+
+export function prettyTimestampExactStatic(v: Date): string
 {
 	const month: string = months[v.getMonth()];
 	const year: number = v.getFullYear();
@@ -94,12 +141,12 @@ export function prettyTimestampDynamic(v: Date): string
 	const elapsed: Date = new Date(new Date().getTime() - v.getTime());
 
 	if (elapsed.getFullYear() - 1970 >= 5)
-		return prettyTimestampStatic(v);
+		return prettyTimestampExactStatic(v);
 	else
-		return prettyTimestampRelative(v);
+		return prettyTimestampRoughRelative(v);
 }
 
-export function prettyTimestampRelativeShort(v: Date): string
+export function prettyTimestampRoughRelativeShort(v: Date): string
 {
 	const elapsed: Date = new Date(new Date().getTime() - v.getTime());
 

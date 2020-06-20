@@ -1,180 +1,83 @@
-import quark from '@quark.js/core';
-import { PostArguments } from './post';
-import { QuarkHTMLElement } from '../../../quark-element';
-import { RedditLink } from '../../../../main/api/reddit-types';
+import * as Kuudere from 'kuudere';
 import * as utils from '../../../utils';
-import { JSONDom } from '../../../utils/json-dom';
+import { Post } from './post';
+import { PostChildConstructor } from './interfaces';
+import { RedditLink } from '../../../../main/api/reddit-types';
+import { MDCRipple } from '@material/ripple';
 
-enum PostPreviewType
+export class PostPreview extends Kuudere.Component<PostChildConstructor>
 {
-	image = 'image',
-}
+	#link: RedditLink;
 
-export class PostPreview extends quark.Component
-{
-	static QuarkData = class
+	#content:
 	{
-		#element: QuarkHTMLElement;
-		#type: PostPreviewType;
-		#args: any;
-		#src?: string;
-		#img?: HTMLImageElement;
-
-		get type(): string { return this.#type; }
-
-		get src(): string|undefined { return this.#src; }
-		set src(v: string|undefined)
+		onMouseUp: (e: MouseEvent) => void;
+		element?: Kuudere.HTMLKuudereComponent<PostPreview>;
+		parent?: Kuudere.HTMLKuudereComponent<Post>;
+	} =
+	{
+		onMouseUp: (e: MouseEvent): void =>
 		{
-			if (this.type === PostPreviewType.image)
-			{
-				if (v != null)
-				{
-					this.#src = v;
-					if (this.#img != null)
-					{
-						this.#img.src = v;
-						if (!this.#img.hasAttribute('loaded'))
-							this.#img.addEventListener('load', (): void =>
-								this.#img?.setAttribute('loaded', ''));
-					}
-					else this.#panic();
-				}
-			}
-			else console.error('Attempt to set src property on non-image PostPreview component.');
+			if (e.button === 0)
+				this.#content.parent!.__props.openPostOverlay();
 		}
+	};
 
-		#panic = (): void =>
-		{
-			this.#element.remove();
-			console.error(utils.componentPanicMessage('PostPreview'));
-		};
-
-		constructor(el: QuarkHTMLElement, type: PostPreviewType, args: any)
-		{
-			this.#element = el;
-			this.#type = type;
-			this.#args = args;
-			switch(this.#type)
-			{
-				case PostPreviewType.image:
-					{
-						this.#src = args.src;
-						this.#img = <HTMLImageElement>this.#element.querySelector('.r-sharp-post__preview__img');
-					}
-					break;
-			}
-		}
-	}
-
-	constructor(el: QuarkHTMLElement, args: PostArguments)
+	constructor(el: Kuudere.HTMLKuudereComponent<PostPreview>, args: Kuudere.Arguments<PostChildConstructor>)
 	{
 		super(el, args);
 
-		const link: RedditLink = args.constructor.link;
+		this.#content.element = el;
+		this.#content.parent = args.constructor.parent;
+		this.#link = args.constructor.link;
 
-		let resolveConstructComplete: () => void = (): void => {};
-		const constructComplete: Promise<PostPreviewType> = new Promise((resolve: () => void): void =>
-		{
-			resolveConstructComplete = resolve;
-		});
+		this.#content.element.classList.add('r-sharp-post__preview');
+		this.#content.element.addEventListener('mouseup', this.#content.onMouseUp);
 
-		const postPreviewContainer: HTMLDivElement = document.createElement('div');
-		postPreviewContainer.classList.add('r-sharp-post__preview');
+		const { div, img } = Kuudere.WebScript.HTML();
 
-		switch (link.post_hint)
+		switch (this.#link.post_hint)
 		{
 			case 'image':
+				if (this.#link.thumbnail.match(utils.URLMatch) != null)
 				{
-					if (link.thumbnail.match(utils.URLMatch) != null)
-					{
-						new JSONDom([ { _: 'img', $: { 'class': 'r-sharp-post__preview__img', 'src': link.thumbnail } } ]).appendTo(postPreviewContainer);
-
-						constructComplete.then((v: PostPreviewType): void =>
-						{
-							el.quark = new PostPreview.QuarkData(el, PostPreviewType.image, { src: link.thumbnail } );
-
-							args.constructor.readyForFullLoad.then((): void =>
-							{
-								el.quark.src = link.url;
-							});
-						});
-					}
-					else
-					{
-						
-					}
-				}
-				break;
-			case 'hosted:video':
-				{
-					postPreviewContainer.innerHTML += 'Videos are not yet supported'
-				}
-				break;
-			case 'rich:video':
-				{
-
-				}
-				break;
-			case 'self':
-				{
-					new JSONDom
-					([
-						{ _: 'div', $: { 'class': 'r-sharp-post__preview__text' }, '': [ link.selftext_html, ] },
-						{ _: 'div', $: { 'class': 'r-sharp-post__preview__text-scrim' } },
-					]).appendTo(postPreviewContainer);
+					MDCRipple.attachTo(
+						this.#content.element.appendChild(
+							div.class`r-sharp-post__preview__image-container`(
+								img.class`r-sharp-post__preview__image`.src`${this.#link.thumbnail}```)));
 					args.constructor.readyForFullLoad.then((): void =>
-						{ el.style.width = `${el.parentElement?.clientWidth}px` || el.style.width; });
-				}
-				break;
-			default:
-				{
-					console.warn(`A PostPreview component encountered an unknown preview type: ${link.post_hint}`);
-					postPreviewContainer.innerHTML += `An error occurred.`;
-				}
-				break;
-		}
-
-		/*
-		if (!(link.media != null))
-		{
-			
-			
-			if (link.thumbnail != null && link.url != null)
-			{
-				if (link.thumbnail !== "self" && link.thumbnail !== 'default')
-				{
-					const postPreviewImage: HTMLImageElement = document.createElement('img');
-					postPreviewImage.classList.add('r-sharp-post__preview__img');
-					postPreviewImage.src = link.thumbnail;
-					postPreviewContainer.appendChild(postPreviewImage);
-
-					constructComplete.then((v: PostPreviewType): void =>
 					{
-						el.quark = new PostPreview.QuarkData(el, PostPreviewType.image, { src: link.thumbnail } );
-
-						args.constructor.readyForFullLoad.then((): void =>
-						{
-							el.quark.src = link.url;
-						});
+						const imgContainer: HTMLDivElement = <HTMLDivElement>this.#content.element!.querySelector('.r-sharp-post__preview__image-container')!;
+						imgContainer.classList.add('mdc-ripple-surface');
+						const img: HTMLImageElement = this.#content.element!.querySelector('img')!;
+						img.src = this.#link.url;
+						img.setAttribute('loaded', '');
 					});
 				}
 				else
 				{
-					if (link.thumbnail === 'self')
-					{
-						new JSONDom
-						([
-							{ _: 'div', $: { 'class': 'r-sharp-post__preview__text' }, '': [
-								args.constructor.link.selftext_html
-							] },
-							{ _: 'div', $: { 'class': 'r-sharp-post__preview__text-scrim' } }
-						]).appendTo(postPreviewContainer);
-					}
+					this.#content.element.innerHTML += `Unsupported thumbnail type: ${this.#link.thumbnail}`;
 				}
-			}
-		}*/
-
-		el.appendChild(postPreviewContainer);
-		resolveConstructComplete();
+				break;
+			case 'self':
+				this.#content.element.appendChildren
+				(
+					div.class`r-sharp-post__preview__text```,
+					div.class`r-sharp-post__preview__text-scrim```,
+				);
+				this.#content.element.querySelector('.r-sharp-post__preview__text')!.innerHTML = this.#link.selftext_html;
+				this.#content.element.querySelectorAll('a').forEach((el: HTMLAnchorElement): void =>
+				{
+					el.outerHTML = el.outerHTML.replace('<a', '<div');
+					el.classList.add('a', 'mdc-ripple-surface');
+					el.setAttribute('data-target', el.getAttribute('href') || '');
+					el.removeAttribute('href');
+				});
+				break;
+			case undefined: break;
+			default:
+				this.#content.element.innerHTML += `Unsupported post_hint type: ${this.#link.post_hint}`;
+				break;
+		}
 	}
 }

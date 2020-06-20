@@ -38,7 +38,7 @@ export class RSharp
 		{
 			// Begin global header init ===========================================================
 
-			// Begin account quicklook init =======================================================
+			//#region ACCOUNT_QUICKLOOK_INIT
 
 			const me: Promise<RedditMe> = api.account.getMe();
 			this.accountQuicklook = Kuudere.constructComponent
@@ -59,8 +59,8 @@ export class RSharp
 			globalHeader.appendChild(this.accountQuicklook);
 			me.then((me: RedditMe): void => { this.currentUser = me; });
 
-			// End account quicklook init =========================================================
-
+			//#endregion ACCOUNT_QUICKLOOK_INIT
+			
 			// Begin tabs init ====================================================================
 	
 			this.tabs = globalHeader.appendChild

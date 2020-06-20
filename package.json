@@ -13,6 +13,7 @@
     "@types/express": "^4.17.6",
     "@types/node-fetch": "^2.5.7",
     "electron": "^9.0.0",
+    "glob": "^7.1.6",
     "sass": "^1.26.5",
     "typescript": "^3.9.3"
   },

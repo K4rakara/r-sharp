@@ -14,6 +14,7 @@
 		animation-duration: 1s;
 		animation-fill-mode: forwards;
 		animation-timing-function: ease-out;
+		user-select: none;
 		background-color: colors.$dark-surface;
 		.r-sharp-post__left
 		{
@@ -39,6 +40,34 @@
 			flex-direction: column;
 			width: calc(100% - 40px - 2em);
 			height: 100%;
+			.r-sharp-post__header
+			{
+				width: 100%;
+				height: max-content;
+				margin-top: .5em;
+				margin-bottom: .5em;
+				.r-sharp-post__header__details
+				{
+					display: inline-flex;
+					flex-direction: row;
+					align-items: center;
+					font-size: 12px;
+					* { margin-left: .125em; margin-right: .125em; }
+					.r-sharp-post__header__details__separator:before { content: '•'; }
+					.r-sharp-post__header__details__subreddit { font-weight: 600; }
+					.r-sharp-post__header__details__user
+					{
+						display: inline-flex;
+						flex-direction: row;
+						align-items: center;
+					}
+				}
+				.r-sharp-post__header__title
+				{
+					display: block;
+					font-size: 18px;
+				}
+			}
 		}
 	}
 }

@@ -1,3 +1,5 @@
+@use "../../colors.scss" as colors;
+@use "@material/ripple" as ripple;
 
 @mixin r-sharp-button-generic
 {
@@ -15,4 +17,23 @@
 	text-align: center;
 	text-transform: uppercase;
 	cursor: pointer;
+}
+
+@mixin r-sharp-markdown
+{
+
+	p
+	{
+		margin-top: .5em;
+		margin-bottom: .5em;
+	}
+	.a
+	{
+		display: inline-block;
+		color: colors.$dark-blue;
+		text-decoration: none;
+		@include ripple.surface;
+		@include ripple.states-base-color(colors.$dark-blue);
+		@include ripple.states-opacities((hover: 0));
+	}
 }

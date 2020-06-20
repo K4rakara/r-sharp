@@ -2,19 +2,24 @@
 
 :root
 {
-	.r-sharp-voting
+	.r-sharp-post__voting
 	{
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		width: max-content;
 	}
-	.r-sharp-voting__text
+	.r-sharp-post__voting__text
 	{
 		font-size: 16px;
 		height: 16px;
 		color: colors.$dark-text;
 		&[upvoted] { color: colors.$dark-upvote; }
 		&[downvoted] { color: colors.$dark-downvote; }
+	}
+	.r-sharp-post__voting__vote-button
+	{
+		--r-sharp-post__voting__vote-button__color: #818384;
+		i[active] { color: var(--r-sharp-post__voting__vote-button__color); }
 	}
 }

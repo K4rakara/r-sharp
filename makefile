@@ -17,7 +17,7 @@ ts-dev:
 
 sass-dev:
 	@echo "Compiling Sass..."; \
-	yarn sass ./src:./bin; \
+	./make.sass.js \
 
 cp-dev:
 	@echo "Copying remaining files..."; \

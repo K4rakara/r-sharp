@@ -1,6 +1,6 @@
 export interface RedditLink
 {
-	all_awardings: any[];
+	all_awardings: RedditAward[];
 	allow_live_comments: boolean;
 	approved_at_utc?: any;
 	approved_by?: any;
@@ -155,4 +155,50 @@ export interface RedditFeed
 		modhash?: any;
 	};
 	kind: string;
+}
+
+export interface RedditAward
+{
+	award_sub_type: string;
+	award_type: string;
+	coin_price: number;
+	coin_reward: number;
+	count: number;
+	days_of_drip_extension: number;
+	days_of_premium: number;
+	description: string;
+	end_date?: number;
+	giver_coin_reward: number;
+	icon_format: string;
+	icon_height: number;
+	icon_width: number;
+	icon_url: string;
+	id: string;
+	is_enabled: boolean;
+	is_new: boolean;
+	name: string;
+	penny_donate: number;
+	penny_price: number;
+	resized_icons:
+	[
+		{ width: 16; height: 16; url: string; },
+		{ width: 32; height: 32; url: string; },
+		{ width: 48; height: 48; url: string; },
+		{ width: 64; height: 64; url: string; },
+		{ width: 128; height: 128; url: string; }
+	];
+	resized_static_icons:
+	[
+		{ width: 16; height: 16; url: string; },
+		{ width: 32; height: 32; url: string; },
+		{ width: 48; height: 48; url: string; },
+		{ width: 64; height: 64; url: string; },
+		{ width: 128; height: 128; url: string; }
+	];
+	start_date?: number;
+	static_icon_height: number;
+	static_icon_width: number;
+	static_icon_url: string;
+	subreddit_coin_reward: number;
+	subreddit_id?: string;
 }

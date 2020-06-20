@@ -1,26 +1,19 @@
 import quark from '@quark.js/core';
-import {
-	Post,
-	UpvoteButton,
-	DownvoteButton,
-	PostHeader,
-	PostPreview,
-	PostVoting,
-	PostButtons,
-} from '../../components/ts';
+import * as Kuudere from 'kuudere';
+import { Post } from '../../components/ts/post';
 import { RedditLink, RedditFeed } from '../../../main/api/reddit-types';
 import * as api from '../../api';
 import * as utils from '../../utils';
 import { IfcFrame, IfcFrameEvent } from '../ifc-frame';
 
-quark.registerComponent('post', Post);
+/*quark.registerComponent('post', Post);
 quark.registerComponent('post__header', PostHeader);
 quark.registerComponent('post__preview', PostPreview);
 quark.registerComponent('post__voting', PostVoting);
 quark.registerComponent('post__buttons', PostButtons);
 quark.registerComponent('upvote-button', UpvoteButton);
 quark.registerComponent('downvote-button', DownvoteButton);
-
+*/
 class Explore
 {
 	public posts: RedditLink[] = [];
@@ -44,15 +37,20 @@ class Explore
 				this.posts.push(...feed.data.children);
 				this.posts.forEach((post: any): void =>
 				{
-					quark.append
+					postsElement.appendChild
 					(
-						postsElement,
-						{
-							tag: 'div',
-							component: 'post',
-							constructor: { link: post.data, readyForFullLoad: readyForFullLoad },
-							element: {},
-						}
+						Kuudere.constructComponent
+						(
+							'div',
+							Post,
+							{
+								constructor:
+								{
+									link: post.data,
+									readyForFullLoad: readyForFullLoad,
+								}
+							}
+						)
 					);
 				});
 
