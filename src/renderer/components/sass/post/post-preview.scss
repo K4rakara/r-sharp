@@ -16,6 +16,7 @@
 		position: relative;
 		.r-sharp-post__preview__image-container
 		{
+			overflow: hidden;
 			border-radius: .7em;
 			@include ripple.surface;
 			@include ripple.states-opacities((hover: 0));
@@ -27,6 +28,20 @@
 				user-select: none;
 				@include animations.content-loading;
 				&[loaded] { @include animations.content-loading-done; }
+			}
+		}
+		.r-sharp-post__preview__image-buttons
+		{
+			bottom: 1em;
+			right: 1em;
+			height: 2em;
+			position: absolute;
+			.r-sharp-post__preview__image-buttons__button
+			{
+				@include mixins.r-sharp-button-generic;
+				background-color: colors.$dark-surface;
+				box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.9);
+				svg { width: 1em; height: 1em; fill: currentColor; }
 			}
 		}
 		.r-sharp-post__preview__text
@@ -46,6 +61,34 @@
 			border-radius: .7em;
 			position: absolute;
 			background: linear-gradient(0deg, rgba(21, 21, 22, 1) 0%, rgba(21, 21, 22, 0) 100%);
+		}
+	}
+	.r-sharp-post[full]
+	{
+		max-height: unset;
+		.r-sharp-post__preview
+		{
+			max-height: unset;
+			.r-sharp-post__preview__image-container
+			{
+				&[zoomed] { cursor: move; }
+				.r-sharp-post__preview__image
+				{
+					width: 100%;
+					max-height: 512px;
+					object-fit: contain;
+					user-select: none;
+				}
+			}
+			.r-sharp-post__preview__text
+			{
+				width: 100%;
+				height: unset;
+				border-radius: .7em;
+				overflow: hidden;
+				@include mixins.r-sharp-markdown;
+			}
+			.r-sharp-post__preview__text-scrim { display: none; }
 		}
 	}
 }

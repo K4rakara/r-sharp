@@ -214,7 +214,20 @@ export class Post extends Kuudere.Component<PostConstructor>
 		this.#content.right.buttons!.__props.update();
 	}
 
-	public openPostOverlay(): void {}
+	public openPostOverlay(): void
+	{
+		if (window.ifcFrame != null)
+		{
+			window.ifcFrame.send
+			(
+				'r-sharp:create-post-overlay',
+				{
+					link: this.#link,
+					puppet: this.#content.element!,
+				}
+			);
+		}
+	}
 
 	public openShareOverlay(): void
 	{

@@ -17,6 +17,7 @@ import * as api from './api/index';
 import { RSharp } from './r-sharp';
 import { IfcFrame } from './tabs/ifc-frame';
 import { IfcRootEvent } from './tabs/ifc-root';
+import { PostOverlay } from './components/ts/overlays/post-overlay';
 
 // Register components.
 quark.registerComponent('upvote-button', UpvoteButton);
@@ -104,4 +105,9 @@ rSharp.ifcRoot.on('r-sharp:clear-tooltip-timeout', (e: IfcRootEvent): void =>
 rSharp.ifcRoot.on('r-sharp:create-snackbar', (e: IfcRootEvent, v: any): void =>
 {
 	rSharp.snackbars.appendChild(Kuudere.constructComponent('div', Snackbar, { constructor: { ...v } }))
+});
+
+rSharp.ifcRoot.on('r-sharp:create-post-overlay', (e: IfcRootEvent, v: any): void =>
+{
+	rSharp.overlays.appendChild(Kuudere.constructComponent('div', PostOverlay, { constructor: { ...v } }));
 });

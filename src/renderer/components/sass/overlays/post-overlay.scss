@@ -1,0 +1,52 @@
+@use "../../../colors.scss" as colors;
+
+:root
+{
+	.r-sharp-post-overlay
+	{
+		display: none;
+		justify-content: center;
+		align-items: flex-start;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		z-index: 1;
+		&[visible] { display: flex; }
+		&[opened]
+		{
+			.r-sharp-post-overlay__scrim { opacity: .7; }
+			.r-sharp-post-overlay__main { top: 0; opacity: 1; }
+		}
+		.r-sharp-post-overlay__scrim
+		{
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			opacity: 0;
+			transition-property: opacity;
+			transition-timing-function: ease-in-out;
+			transition-duration: .5s;
+		}
+		.r-sharp-post-overlay__main
+		{
+			top: 100vh;
+			width: 100%;
+			height: 100%;
+			overflow-y: scroll;
+			position: relative;
+			transition-property: opacity, top;
+			transition-timing-function: ease-in-out;
+			transition-duration: .5s;
+			&::-webkit-scrollbar { display: none; }
+			.r-sharp-post-overlay__content
+			{
+				width: 87.5vw;
+				.r-sharp-post { box-shadow: 0px 0px 8px 8px rgba(0, 0, 0, 0.9); }
+			}
+		}
+	}
+}
