@@ -71,6 +71,7 @@
 			max-height: unset;
 			.r-sharp-post__preview__image-container
 			{
+				width: 100%;
 				&[zoomed] { cursor: move; }
 				.r-sharp-post__preview__image
 				{

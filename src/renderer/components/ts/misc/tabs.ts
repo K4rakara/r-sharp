@@ -1,6 +1,8 @@
 import quark from '@quark.js/core';
+import * as Kuudere from 'kuudere';
 import { MDCRipple } from '@material/ripple';
 import { QuarkHTMLElement } from '../../../quark-element';
+import { Tooltip2 } from '../tooltip';
 
 export class Tabs extends quark.Component
 {
@@ -165,15 +167,14 @@ export class Tabs extends quark.Component
 		tabsExplore.onclick = (): void => el.quark.switchTo('explore');
 		const tabsExploreContext: MDCRipple = new MDCRipple(tabsExplore);
 		tabsExplore.quark = new TabChild(tabsExplore, tabsExploreContext);
-		quark.append
+		tabsExplore.appendChild
 		(
-			tabsExplore,
-			{
-				tag: 'div',
-				component: 'tooltip',
-				constructor: { text: 'Explore' },
-				element: {},
-			}
+			Kuudere.constructComponent
+			(
+				'div',
+				Tooltip2,
+				{ constructor: 'Explore' }
+			)
 		);
 		tabsContainer.appendChild(tabsExplore);
 
@@ -187,15 +188,14 @@ export class Tabs extends quark.Component
 		tabsChat.onclick = (): void => el.quark.switchTo('chat');
 		const tabsChatContext: MDCRipple = new MDCRipple(tabsChat);
 		tabsChat.quark = new TabChild(tabsChat, tabsChatContext);
-		quark.append
+		tabsChat.appendChild
 		(
-			tabsChat,
-			{
-				tag: 'div',
-				component: 'tooltip',
-				constructor: { text: 'Chats' },
-				element: {},
-			}
+			Kuudere.constructComponent
+			(
+				'div',
+				Tooltip2,
+				{ constructor: 'Chats' }
+			)
 		);
 		tabsContainer.appendChild(tabsChat);
 
@@ -209,15 +209,14 @@ export class Tabs extends quark.Component
 		tabsNotifications.onclick = (): void => el.quark.switchTo('notifications');
 		const tabsNotificationsContext: MDCRipple = new MDCRipple(tabsNotifications);
 		tabsNotifications.quark = new TabChild(tabsNotifications, tabsNotificationsContext);
-		quark.append
+		tabsNotifications.appendChild
 		(
-			tabsNotifications,
-			{
-				tag: 'div',
-				component: 'tooltip',
-				constructor: { text: 'Notifications' },
-				element: {},
-			}
+			Kuudere.constructComponent
+			(
+				'div',
+				Tooltip2,
+				{ constructor: 'Notifications' }
+			)
 		);
 		tabsContainer.appendChild(tabsNotifications);
 

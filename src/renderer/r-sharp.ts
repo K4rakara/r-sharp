@@ -8,6 +8,7 @@ import ifcRoot, { IfcRoot, IfcRootEvent } from './tabs/ifc-root';
 import { IfcFrame } from './tabs/ifc-frame';
 import { QuarkHTMLElement } from './quark-element';
 import { RedditLink } from '../main/api/reddit-types';
+import { Post } from './components/ts/post/post';
 
 export class RSharp
 {
@@ -132,9 +133,9 @@ export class RSharp
 				'r-sharp:show-share-menu',
 				(
 					e: IfcRootEvent,
-					data: { type: 'link:image', v: RedditLink, el: QuarkHTMLElement }
-						|{ type: 'link:video', v: RedditLink, el: QuarkHTMLElement }
-						|{ type: 'link:text', v: RedditLink, el: QuarkHTMLElement }
+					data: { type: 'link:image', v: RedditLink, el: Kuudere.HTMLKuudereComponent<Post> }
+						|{ type: 'link:video', v: RedditLink, el: Kuudere.HTMLKuudereComponent<Post> }
+						|{ type: 'link:text', v: RedditLink, el: Kuudere.HTMLKuudereComponent<Post> }
 				): void =>
 				{
 					this.overlays.appendChild
