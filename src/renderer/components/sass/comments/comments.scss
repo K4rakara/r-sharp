@@ -1,0 +1,18 @@
+@use "../../../colors.scss" as colors;
+
+:root
+{
+	.r-sharp-comments
+	{
+		width: 100%;
+		.r-sharp-comments__comments
+		{
+			padding-left: 1em;
+			padding-right: 1em;
+			width: calc(100% - 2em);
+			border-radius: 1em;
+			background-color: colors.$dark-surface;
+			box-shadow: 0px 0px 8px 8px rgba(0, 0, 0, 0.9);
+		}
+	}
+}

@@ -58,3 +58,18 @@ export function HTTPDump(req: Request, res: Response): void
 		return toReturn;
 	})());
 }
+
+export function objectToQueryParams(obj: { [key: string]: { [key: string]: any; toString: typeof toString; }|string|number; }): string
+{
+	let toReturn: string =  '';
+	let first: boolean = true;
+	Object.keys(obj).forEach((k: string): void =>
+	{
+		if (first)
+			toReturn += `?${k}=${obj[k].toString()}`;
+		else
+			toReturn += `&${k}=${obj[k].toString()}`;
+		first = false;
+	});
+	return toReturn;
+}

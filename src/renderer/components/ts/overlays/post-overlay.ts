@@ -7,6 +7,7 @@ import { PostVoting } from '../post/post-voting';
 import { PostPreview } from '../post/post-preview';
 import { PostButtons } from '../post/post-buttons';
 import { RedditLink } from '../../../../main/api/reddit-types';
+import { Comments } from '../comments';
 
 interface PostOverlayConstructor
 {
@@ -71,6 +72,19 @@ export class PostOverlay extends Kuudere.Component<PostOverlayConstructor>
 							'div',
 							PostOverlayBody,
 							{ constructor: { ...args.constructor } }
+						),
+						Kuudere.constructComponent
+						(
+							'div',
+							Comments,
+							{
+								constructor:
+								{
+									link: args.constructor.link,
+									//@ts-ignore
+									parent: null,
+								}
+							}
 						)))
 		);
 

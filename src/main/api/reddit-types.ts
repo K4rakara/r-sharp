@@ -124,11 +124,6 @@ export interface RedditLink
 	wls: number;
 }
 
-export interface RedditComment
-{
-
-}
-
 export interface RedditPreviewImage
 {
 	id: string;
@@ -201,4 +196,126 @@ export interface RedditAward
 	static_icon_url: string;
 	subreddit_coin_reward: number;
 	subreddit_id?: string;
+}
+
+export interface RedditComments
+{
+	//@ts-ignore
+	0:
+	{
+		data:
+		{
+			after?: number;
+			before?: number;
+			children:
+			{
+				data: RedditLink;
+				kind: 't3';
+			};
+			dist: number;
+			modhash?: any;
+		};
+		kind: 'Listing';
+	};
+	[key: number]:
+	{
+		data:
+		{
+			after?: number;
+			before?: number;
+			children:
+			{
+				data: RedditComment;
+				kind: string;
+			}[];
+			dist?: number;
+			is_truncated?: boolean;
+			modhash?: any;
+		};
+		kind: 'Listing';
+	};
+}
+
+export interface RedditComment
+{
+	all_awardings: any[];
+	approved_at_utc?: number;
+	approved_by?: any;
+	archived: boolean;
+	associated_award?: any;
+	author: string;
+	author_flair_background_color?: string;
+	author_flair_css_class?: string;
+	author_flair_richtext?: [];
+	author_flair_text?: string;
+	author_flair_text_color?: string;
+	author_flair_type?: string;
+	author_fullname: string;
+	author_patreon_flair: boolean;
+	author_premium: false;
+	awarders: any[];
+	banned_at_utc?: number;
+	banned_by?: any;
+	body: string;
+	body_html: string;
+	can_guild: boolean;
+	can_mod_post: boolean;
+	collapsed: boolean;
+	collapsed_because_crowd_control?: boolean;
+	collapsed_reason?: string;
+	controversiality: number;
+	created: number;
+	created_utc: number;
+	depth: number;
+	distinguished: string;
+	downs: number;
+	edited: boolean;
+	gilded: number;
+	gildings: {}|any;
+	id: string;
+	is_submitter: false;
+	likes?: boolean;
+	link_id: string;
+	locked: boolean;
+	mod_note?: string;
+	mod_reason_by?: any;
+	mod_reason_title?: any;
+	mod_reports: any[];
+	name: string;
+	no_follow: boolean;
+	num_reports?: number;
+	parent_id: string;
+	permalink: string;
+	removal_reason?: string;
+	replies:
+	{
+		data?:
+		{
+			after?: number;
+			before?: number;
+			children:
+			{
+				data: RedditComment;
+				kind: string;
+			}[];
+			dist?: any;
+			modhash?: any;
+		};
+		kind: 'Listing';
+	};
+	report_reasons?: any;
+	saved: boolean;
+	score: number;
+	score_hidden: boolean;
+	send_replies: boolean;
+	sticked: boolean;
+	subreddit: string;
+	subreddit_id: string;
+	subreddit_name_prefixed: string;
+	subreddit_type: string;
+	top_awarded_type?: any;
+	total_awards_received: number;
+	treatment_tags: any[];
+	ups: number;
+	user_reports: any[];
 }

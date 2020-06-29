@@ -1,0 +1,34 @@
+@use "../../../colors.scss";
+
+:root
+{
+	.r-sharp-comment
+	{
+		width: 100%;
+		.r-sharp-comment__body
+		{
+			width: 100%;
+			.r-sharp-comment__body__left
+			{
+				display: inline-flex;
+				flex-direction: column;
+				width: 20px;
+				height: 100%;
+				margin-left: 1em;
+				margin-right: 1em;
+			}
+			.r-sharp-comment__body__right
+			{
+				display: inline-flex;
+				flex-direction: column;
+				width: calc(100% - 20px - 2em);
+				height: 100%;
+			}
+		}
+		.r-sharp-comment__replies
+		{
+			width: 100%;
+			.r-sharp-comment { margin-left: 1em; }
+		}
+	}
+}

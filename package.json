@@ -21,6 +21,7 @@
     "@material/ripple": "^6.0.0",
     "@quark.js/core": "^0.1.3",
     "btoa": "^1.2.1",
+    "chalk": "^4.1.0",
     "dynamics.js": "^1.1.5",
     "express": "^4.17.1",
     "kuudere": "/run/media/disk/dev/web/kuudere",

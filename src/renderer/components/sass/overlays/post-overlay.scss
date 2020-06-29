@@ -47,6 +47,7 @@
 			&::-webkit-scrollbar { display: none; }
 			.r-sharp-post-overlay__content
 			{
+				height: 100%;
 				width: 62.5vw;
 				.r-sharp-post { box-shadow: 0px 0px 8px 8px rgba(0, 0, 0, 0.9); }
 			}

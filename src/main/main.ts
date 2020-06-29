@@ -11,6 +11,7 @@ import {_, HTTPDump} from '../utils'; _;
 import { RedditMe } from './api/account';
 import { RedditFeed } from './api/reddit-types';
 import { RedditVoteType } from './api/link';
+import { GetCommentsArguments } from './api/link/comments';
 
 let window: BrowserWindow|null = null;
 let webserver: http.Server|null = null;
@@ -460,6 +461,11 @@ ipcMain.on('reddit:link:save', async (e: IpcMainEvent, link: string, save?: bool
 	if (!(save != null)) save = true;
 	const ok: boolean = await api.link.save(link, save, globalState.oauthAccessToken, globalState.userName);
 	e.reply('reply:reddit:link:save', ok);
+});
+
+ipcMain.on('reddit:link:comments', async (e: IpcMainEvent, link: string, subreddit?: string, arg?: GetCommentsArguments): Promise<void> =>
+{
+	e.reply('reply:reddit:link:comments', await api.link.getComments(link, globalState.oauthAccessToken, globalState.userName!, arg||{}));
 });
 
 /**
