@@ -1,34 +1,71 @@
-@use "../../../colors.scss";
+@use "../../../colors.scss" as colors;
+@use "../mixins.scss" as mixins;
+@use "../animations.scss" as animations;
 
 :root
 {
 	.r-sharp-comment
 	{
 		width: 100%;
+		border-left-color: colors.$dark-surface-light;
+		border-left-width: 1px;
+		border-left-style: solid;
 		.r-sharp-comment__body
 		{
-			width: 100%;
+			width: calc(100% - 1px);
 			.r-sharp-comment__body__left
 			{
 				display: inline-flex;
 				flex-direction: column;
-				width: 20px;
+				width: 0;
 				height: 100%;
-				margin-left: 1em;
-				margin-right: 1em;
+				margin-left: .5em;
+				margin-right: .5em;
 			}
 			.r-sharp-comment__body__right
 			{
 				display: inline-flex;
 				flex-direction: column;
-				width: calc(100% - 20px - 2em);
+				width: calc(100% - 1em);
 				height: 100%;
+				.r-sharp-comment__body__right__header
+				{
+					padding-top: .5em;
+					font-size: 12px;
+					._user
+					{
+						display: inline-flex;
+						align-items: center;
+						._icon
+						{
+							display: inline-block;
+							width: 1.5em;
+							height: 1.5em;
+							border-color: colors.$dark-surface-light;
+							border-width: 1px;
+							border-style: solid;
+							border-radius: 50%;
+							overflow: hidden;
+							background-color: colors.$dark-background;
+							img
+							{
+								width: 100%;
+								height: 100%;
+								object-fit: contain;
+							}
+						}
+					}
+				}
+				.r-sharp-comment__body__right__content
+				{
+					@include mixins.r-sharp-markdown;
+				}
 			}
 		}
 		.r-sharp-comment__replies
 		{
 			width: 100%;
-			.r-sharp-comment { margin-left: 1em; }
+			.r-sharp-comment { width: calc(100% - 1em); margin-left: 1em; }
 		}
 	}
 }

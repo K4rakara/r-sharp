@@ -23,7 +23,7 @@ export async function getComments(link: string, token: string, user: string, arg
 {
 	if (!(arg != null)) arg = {};
 	//@ts-ignore
-	const url: string = `${oauthRedditUrl}/comments/${link}/${utils.objectToQueryParams(arg)}&raw_json=1`;
+	const url: string = `${oauthRedditUrl}/comments/${link}/${utils.objectToQueryParams({ ...arg, raw_json: 1 })}`;
 	const req: Request = new Request(url, { headers: new AuthHeaders(token, {}, user) });
 	logging.reqLog(req);
 	const res: Response = await fetch(req);

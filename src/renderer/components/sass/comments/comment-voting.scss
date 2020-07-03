@@ -1,0 +1,42 @@
+@use "../../../colors.scss" as colors;
+@use "@material/ripple" as ripple;
+
+:root
+{
+	.r-sharp-comment
+	{
+		._voting
+		{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			left: -.5em;
+			width: 100%;
+			height: 3em;
+			position: relative;
+			._vote-button
+			{
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				width: 1.5em;
+				height: 1.5em;
+				border-radius: 50%;
+				font-size: .75em;
+			}
+			._upvote { @include ripple.states-base-color(colors.$dark-upvote); }
+			._upvote[active] i { color: colors.$dark-upvote; }
+			._text
+			{
+				font-size: 12px;
+				height: 12px;
+				color: colors.$dark-text;
+				&[upvoted] { color: colors.$dark-upvote; }
+				&[downvoted] { color: colors.$dark-downvote; }
+			}
+			._downvote[active] i { color: colors.$dark-downvote; }
+			._downvote { @include ripple.states-base-color(colors.$dark-downvote); }
+		}
+	}
+}
