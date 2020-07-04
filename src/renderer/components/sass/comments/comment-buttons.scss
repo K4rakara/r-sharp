@@ -1,0 +1,29 @@
+@use "../../../colors.scss" as colors;
+
+:root
+{
+	.r-sharp-comment
+	{
+		._buttons
+		{
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			height: 1em;
+			._button
+			{
+				display: inline-flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				height: 1em;
+				padding-right: .5em;
+				border-radius: .7em;
+				user-select: none;
+				text-align: center;
+				cursor: pointer;
+			}
+		}
+	}
+}

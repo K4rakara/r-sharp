@@ -10,6 +10,9 @@
 		border-left-color: colors.$dark-surface-light;
 		border-left-width: 1px;
 		border-left-style: solid;
+		user-select: none;
+		margin-top: 1em;
+		margin-bottom: 1em;
 		.r-sharp-comment__body
 		{
 			width: calc(100% - 1px);
@@ -36,6 +39,12 @@
 					{
 						display: inline-flex;
 						align-items: center;
+						span
+						{
+							display: inline-block;
+							margin-left: .25em;
+							margin-right: .25em;
+						}
 						._icon
 						{
 							display: inline-block;
@@ -54,10 +63,15 @@
 								object-fit: contain;
 							}
 						}
+						._flair
+						{
+							background-color: colors.$dark-surface-light;
+						}
 					}
 				}
 				.r-sharp-comment__body__right__content
 				{
+					font-size: .9em;
 					@include mixins.r-sharp-markdown;
 				}
 			}

@@ -5,6 +5,7 @@ import
 	Comment,
 }
 from '.';
+import { MDCRipple } from '@material/ripple';
 
 export class CommentButtons extends Kuudere.Component<CommentButtonsConstructor>
 {
@@ -72,31 +73,31 @@ export class CommentButtons extends Kuudere.Component<CommentButtonsConstructor>
 
 		el.classList.add('_buttons');
 
-		const { span, i } = Kuudere.WebScript.HTML();
+		const { div, i } = Kuudere.WebScript.HTML();
 
 		el.appendChildren
 		(
-			span
+			div
 				.class`_button mdc-ripple-surface`
 				.$listeners({})(
-					i.class`r-sharp-icons__reply```,
+					i.class`r-sharp-icons__comment```,
 					`Reply`),
-			span
+			div
 				.class`_button mdc-ripple-surface`
 				.$listeners({})(
 					i.class`r-sharp-icons__give-award```,
 					`Award`),
-			span
+			div
 				.class`_button mdc-ripple-surface`
 				.$listeners({})(
 					i.class`r-sharp-icons__share```,
 					`Share`),
-			span
+			div
 				.class`_button mdc-ripple-surface`
 				.$listeners({})(
 					i.class`r-sharp-icons__save```,
 					`Save`),
-			span
+			div
 				.class`_button mdc-ripple-surface`
 				.$listeners({})(
 					i.class`r-sharp-icons__report```,
@@ -108,5 +109,11 @@ export class CommentButtons extends Kuudere.Component<CommentButtonsConstructor>
 		this.content.share.element = <HTMLSpanElement>el.querySelector('._button:nth-child(3)')!;
 		this.content.save.element = <HTMLSpanElement>el.querySelector('._button:nth-child(4)')!;
 		this.content.report.element = <HTMLSpanElement>el.querySelector('._button:nth-child(5)')!;
+
+		MDCRipple.attachTo(this.content.reply.element!);
+		MDCRipple.attachTo(this.content.award.element!);
+		MDCRipple.attachTo(this.content.share.element!);
+		MDCRipple.attachTo(this.content.save.element!);
+		MDCRipple.attachTo(this.content.report.element!);
 	}
 }

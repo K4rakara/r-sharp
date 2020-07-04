@@ -23,7 +23,11 @@ export class PostOverlay extends Kuudere.Component<PostOverlayConstructor>
 		{
 			onMouseUp: (el: HTMLDivElement, e: MouseEvent) => void;
 			element?: HTMLDivElement;
-		}
+		};
+		main:
+		{
+			element?: HTMLDivElement;
+		};
 		element?: Kuudere.HTMLKuudereComponent<PostOverlay>;
 	} = 
 	{
@@ -32,10 +36,15 @@ export class PostOverlay extends Kuudere.Component<PostOverlayConstructor>
 			onMouseUp: (el: HTMLDivElement, e: MouseEvent): void =>
 				{ if (e.button === 0) this.close(); }
 		},
+		main:
+		{
+
+		},
 	};
 
 	public close(): void
 	{
+		this.#content.main.element!.scroll({ top: 0, behavior: 'auto' });
 		this.#content.element!.removeAttribute('opened');
 		setTimeout((): void =>
 		{
@@ -87,6 +96,8 @@ export class PostOverlay extends Kuudere.Component<PostOverlayConstructor>
 							}
 						)))
 		);
+
+		this.#content.main.element = <HTMLDivElement>this.#content.element.querySelector('.r-sharp-post-overlay__main')!;
 
 		setTimeout((): void =>
 		{
